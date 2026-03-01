@@ -1,5 +1,4 @@
 const vocabulary = [
-    // ÜNİTE 1: Operasyon ve Karşılama (A0 Seviyesi)
     { 
         seviye: "A0", unite: 1, tema: "Operasyon ve Karşılama", 
         kelime: "Welcome", anlam: "Hoş geldiniz", 
@@ -12,8 +11,6 @@ const vocabulary = [
         cumle: "Please make sure your luggage is tagged correctly.",
         cumleCeviri: "Lütfen bagajınızın doğru etiketlendiğinden emin olun." 
     },
-
-    // ÜNİTE 26: Antik Anadolu ve Tarih Yazıcılığı (C1 Seviyesi)
     { 
         seviye: "C1", unite: 26, tema: "Antik Anadolu ve Tarih Yazıcılığı", 
         kelime: "Civilization", anlam: "Medeniyet / Uygarlık", 
