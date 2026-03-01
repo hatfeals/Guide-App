@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <link rel="apple-touch-icon" href="icon.png"> <title>Rehber El Kitabı</title>
+
+    <style>
+        /* Koyu Tema ve Temel Ayarlar */
+        * {
+            box-sizing: border-box;
+            /* Dokunmatik cihazlarda yazıyı yanlışlıkla seçmeyi engeller */
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Derin antrasit arka plan */
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Bilgi Kartı Tasarımı */
+        .flashcard {
+            background-color: #1E1E1E;
+            width: 85%;
+            max-width: 400px;
+            height: 60vh;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .level-badge {
+            color: #D4AF37; /* Rehberlik hissiyatı için altın sarısı detay */
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .word {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        /* Şimdilik anlamı gizliyoruz, tıklandığında açılması için JS yazacağız */
+        .translation {
+            font-size: 24px;
+            color: #A0A0A0;
+            margin-bottom: 20px;
+        }
+
+        .sentence {
+            font-size: 18px;
+            font-style: italic;
+            color: #CCCCCC;
+            line-height: 1.5;
+        }
+
+        /* Alt Buton */
+        .next-btn {
+            margin-top: 30px;
+            background-color: #D4AF37;
+            color: #121212;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flashcard">
+        <div class="level-badge">SEVİYE: A0</div>
+        <div class="word">Hand</div>
+        <div class="translation">El</div>
+        <div class="sentence">"Wash your hands for hygiene."</div>
+    </div>
+
+    <button class="next-btn">Sonraki Kelime</button>
+
+</body>
+</html>
