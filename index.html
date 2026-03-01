@@ -7,116 +7,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" href="icon.png">
     
     <title>Rehber Asistanı</title>
+    
     <style>
+        /* Tasarım ve Arayüz Ayarları */
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow: hidden; }
+        
         .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; padding: 20px; overflow-y: auto; }
         .screen.active { display: flex; }
+
         .header { width: 100%; max-width: 400px; display: flex; align-items: center; padding: 20px 0; margin-bottom: 20px; position: relative; }
         .back-btn { background: none; border: none; color: #D4AF37; font-size: 16px; font-weight: bold; cursor: pointer; padding: 10px; position: absolute; left: 0; z-index: 100; }
-        .screen-title { width: 100%; text-align: center; font-size: 20px; font-weight: bold; }
+        .screen-title { width: 100%; text-align: center; font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+
+        /* Ana Menü Kartları */
         .menu-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 20px; margin-top: 30px; }
-        .menu-card { background-color: #1E1E1E; border-radius: 20px; padding: 30px 20px; text-align: center; border: 1px solid #333; cursor: pointer; }
-        .menu-card:active { background-color: #252525; transform: scale(0.98); }
+        .menu-card { background-color: #1E1E1E; border-radius: 20px; padding: 30px 20px; text-align: center; border: 1px solid #333; cursor: pointer; transition: transform 0.1s; }
+        .menu-card:active { transform: scale(0.98); background-color: #252525; }
         .menu-card h2 { margin: 0 0 10px 0; color: #D4AF37; font-size: 24px; }
         .menu-card p { margin: 0; color: #A0A0A0; font-size: 14px; }
         .disabled { opacity: 0.5; pointer-events: none; }
-        .unit-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Ünite Listesi */
+        .unit-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 40px; }
         .unit-item { background-color: #1E1E1E; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; cursor: pointer; }
         .unit-item:active { background-color: #252525; }
         .unit-level { background-color: #D4AF37; color: #121212; font-weight: bold; padding: 5px 12px; border-radius: 8px; font-size: 14px; }
+
+        /* Kelime Kartı (Flashcard) */
         .flashcard-container { width: 100%; max-width: 400px; height: 50vh; perspective: 1000px; margin-top: 20px; }
-        .flashcard { width: 100%; height: 100%; position: relative; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        .flashcard { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
         .flashcard.is-flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; background-color: #1E1E1E; border-radius: 20px; border: 1px solid #333; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+        .card-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; background-color: #1E1E1E; border-radius: 20px; border: 1px solid #333; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
         .card-back { transform: rotateY(180deg); }
+        
         .word { font-size: 42px; font-weight: 800; }
         .translation { font-size: 32px; color: #D4AF37; margin-bottom: 25px; font-weight: bold; }
         .sentence { font-size: 18px; font-style: italic; color: #CCCCCC; line-height: 1.5; margin-top: 20px; }
+
+        /* Butonlar */
         .controls { margin-top: 30px; display: flex; gap: 15px; width: 100%; max-width: 400px; }
         .btn { background-color: #D4AF37; color: #121212; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; flex-grow: 1; }
+        .btn:active { background-color: #bfa032; }
         .btn-audio { flex-grow: 0; width: 65px; font-size: 24px; }
     </style>
 </head>
 <body>
+
     <div id="screen-home" class="screen active">
         <div class="header"><div class="screen-title">Rehber Asistanı</div></div>
         <div class="menu-container">
-            <div class="menu-card" id="btn-open-dict"><h2>📖 Mesleki Sözlük</h2><p>A0'dan C2'ye Üniteler</p></div>
+            <div class="menu-card" id="btn-open-dict">
+                <h2>📖 Mesleki Sözlük</h2>
+                <p>A0'dan C2'ye Üniteler</p>
+            </div>
             <div class="menu-card disabled"><h2>📚 Kütüphane</h2><p>Yakında</p></div>
             <div class="menu-card disabled"><h2>🗺️ Tur Rotaları</h2><p>Yakında</p></div>
         </div>
     </div>
+
     <div id="screen-units" class="screen">
-        <div class="header"><button class="back-btn" onclick="showScreen('screen-home')">◄ Geri</button><div class="screen-title">Üniteler</div></div>
-        <div id="unitListContainer" class="unit-list"></div>
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('screen-home')">◄ Geri</button>
+            <div class="screen-title">Üniteler</div>
+        </div>
+        <div class="unit-list" id="unitListContainer"></div>
     </div>
+
     <div id="screen-cards" class="screen">
-        <div class="header"><button class="back-btn" onclick="showScreen('screen-units')">◄ Üniteler</button><div id="activeUnitTitle" class="screen-title">Ünite</div></div>
-        <div class="flashcard-container"><div class="flashcard" id="flashcard">
-            <div class="card-face">
-                <div class="word" id="wordText">...</div>
-                <div class="sentence" id="sentenceFront">...</div>
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('screen-units')">◄ Üniteler</button>
+            <div class="screen-title" id="activeUnitTitle">Ünite</div>
+        </div>
+        <div class="flashcard-container" id="cardContainer">
+            <div class="flashcard" id="flashcard">
+                <div class="card-face">
+                    <div class="word" id="wordText">...</div>
+                    <div class="sentence" id="sentenceFront">...</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="translation" id="translationText">...</div>
+                    <div class="sentence" id="sentenceBack" style="color:#A0A0A0">...</div>
+                </div>
             </div>
-            <div class="card-face card-back">
-                <div class="translation" id="translationText">...</div>
-                <div class="sentence" id="sentenceBack" style="color:#A0A0A0">...</div>
-            </div>
-        </div></div>
-        <div id="progressText" style="margin-top:15px; color:#A0A0A0">...</div>
-        <div class="controls"><button class="btn btn-audio" id="audioBtn">🔊</button><button class="btn" id="nextBtn">Sonraki</button></div>
+        </div>
+        <div id="progressText" style="margin-top: 15px; color: #A0A0A0; font-size: 14px;">...</div>
+        <div class="controls">
+            <button class="btn btn-audio" id="audioBtn">🔊</button>
+            <button class="btn" id="nextBtn">Sonraki Kelime</button>
+        </div>
     </div>
 
     <script src="words.js"></script>
     <script>
-        function showScreen(sId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(sId).classList.add('active'); }
-        document.getElementById('btn-open-dict').onclick = () => { renderUnits(); showScreen('screen-units'); };
-        
+        function showScreen(sId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(sId).classList.add('active');
+        }
+
+        document.getElementById('btn-open-dict').onclick = () => {
+            renderUnits();
+            showScreen('screen-units');
+        };
+
         function renderUnits() {
-            const cont = document.getElementById('unitListContainer');
-            cont.innerHTML = '';
+            const container = document.getElementById('unitListContainer');
+            container.innerHTML = '';
             const unitMap = new Map();
-            vocabulary.forEach(v => { if(!unitMap.has(v.unite)) unitMap.set(v.unite, {s:v.seviye, t:v.tema, c:0}); unitMap.get(v.unite).c++; });
+            vocabulary.forEach(v => {
+                if(!unitMap.has(v.unite)) unitMap.set(v.unite, {seviye: v.seviye, tema: v.tema, count: 0});
+                unitMap.get(v.unite).count++;
+            });
+
             Array.from(unitMap.keys()).sort((a,b)=>a-b).forEach(uNum => {
-                const d = unitMap.get(uNum);
-                const item = document.createElement('div');
-                item.className = 'unit-item';
-                item.innerHTML = `<div><h3>Ünite ${uNum}: ${d.t}</h3><p>${d.c} Kelime</p></div><div class="unit-level">${d.s}</div>`;
-                item.onclick = () => startUnit(uNum);
-                cont.appendChild(item);
+                const data = unitMap.get(uNum);
+                const div = document.createElement('div');
+                div.className = 'unit-item';
+                div.innerHTML = `<div><h3>Ünite ${uNum}: ${data.tema}</h3><p>${data.count} Kelime</p></div><div class="unit-level">${data.seviye}</div>`;
+                div.onclick = () => startUnit(uNum);
+                container.appendChild(div);
             });
         }
 
         let curWords = [], curIdx = 0;
-        const card = document.getElementById('flashcard');
+        const flashcard = document.getElementById('flashcard');
+
         function startUnit(uNum) {
             curWords = vocabulary.filter(v => v.unite === uNum);
             curIdx = 0;
             document.getElementById('activeUnitTitle').innerText = `Ünite ${uNum}`;
-            if(card.classList.contains('is-flipped')) card.classList.remove('is-flipped');
-            loadCard(); showScreen('screen-cards');
+            if(flashcard.classList.contains('is-flipped')) flashcard.classList.remove('is-flipped');
+            loadCard();
+            showScreen('screen-cards');
         }
+
         function loadCard() {
             const d = curWords[curIdx];
             document.getElementById('wordText').innerText = d.kelime;
-            document.getElementById('sentenceFront').innerText = `"${d.cumle}"`;
-            document.getElementById('translationText').innerText = d.anlam;
-            document.getElementById('sentenceBack').innerText = `"${d.cumleCeviri}"`;
-            document.getElementById('progressText').innerText = `Kelime: ${curIdx+1} / ${curWords.length}`;
-        }
-        card.onclick = () => card.classList.toggle('is-flipped');
-        document.getElementById('nextBtn').onclick = () => {
-            curIdx = (curIdx + 1) % curWords.length;
-            if(card.classList.contains('is-flipped')) { card.classList.remove('is-flipped'); setTimeout(loadCard, 300); } else loadCard();
-        };
-        document.getElementById('audioBtn').onclick = () => {
-            const u = new SpeechSynthesisUtterance(`${curWords[curIdx].kelime}. ${curWords[curIdx].cumle}`);
-            u.lang = 'en-US'; u.rate = 0.8; window.speechSynthesis.speak(u);
-        };
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js')); }
-    </script>
-</body>
-</html>
+            document.getElementById
