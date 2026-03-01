@@ -40,7 +40,7 @@
         .word { font-size: 42px; font-weight: 800; }
         .translation { font-size: 32px; color: #D4AF37; margin-bottom: 25px; font-weight: bold; }
         .sentence { font-size: 18px; font-style: italic; color: #CCCCCC; line-height: 1.5; margin-top: 20px; }
-        .sentence-back { color: #A0A0A0; } /* Arka yüzdeki cümlenin rengi biraz daha soluk olsun */
+        .sentence-back { color: #A0A0A0; }
 
         .controls { margin-top: 30px; display: flex; gap: 15px; width: 100%; max-width: 400px; }
         .btn { background-color: #D4AF37; color: #121212; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; flex-grow: 1; display: flex; justify-content: center; align-items: center; }
@@ -88,4 +88,139 @@
         </div>
         
         <div class="flashcard-container" id="cardContainer">
-            <div class="
+            <div class="flashcard" id="flashcard">
+                <div class="card-face card-front">
+                    <div class="word" id="wordText">Loading...</div>
+                    <div class="sentence" id="sentenceFront">"Loading..."</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="translation" id="translationText">Yükleniyor...</div>
+                    <div class="sentence sentence-back" id="sentenceBack">"Yükleniyor..."</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-text" id="progressText">Kelime: 1 / 10</div>
+
+        <div class="controls">
+            <button class="btn btn-audio" id="audioBtn">🔊</button>
+            <button class="btn" id="nextBtn">Sonraki Kelime</button>
+        </div>
+    </div>
+
+    <script src="words.js"></script>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        document.getElementById('btn-open-dict').addEventListener('click', () => {
+            renderUnits();
+            showScreen('screen-units');
+        });
+
+        function renderUnits() {
+            const container = document.getElementById('unitListContainer');
+            container.innerHTML = '';
+            
+            const unitMap = new Map();
+            vocabulary.forEach(item => {
+                if (!unitMap.has(item.unite)) {
+                    unitMap.set(item.unite, { seviye: item.seviye, tema: item.tema, count: 0 });
+                }
+                unitMap.get(item.unite).count++;
+            });
+
+            Array.from(unitMap.keys()).sort((a,b) => a-b).forEach(uniteNum => {
+                const data = unitMap.get(uniteNum);
+                const div = document.createElement('div');
+                div.className = 'unit-item';
+                div.innerHTML = `
+                    <div class="unit-info">
+                        <h3>Ünite ${uniteNum}: ${data.tema}</h3>
+                        <p>${data.count} Kelime</p>
+                    </div>
+                    <div class="unit-level">${data.seviye}</div>
+                `;
+                div.addEventListener('click', () => startUnit(uniteNum, data.tema));
+                container.appendChild(div);
+            });
+        }
+
+        let currentUnitWords = [];
+        let currentIndex = 0;
+        
+        const flashcard = document.getElementById('flashcard');
+        const cardContainer = document.getElementById('cardContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const audioBtn = document.getElementById('audioBtn');
+        
+        const wordText = document.getElementById('wordText');
+        const sentenceFront = document.getElementById('sentenceFront');
+        const translationText = document.getElementById('translationText');
+        const sentenceBack = document.getElementById('sentenceBack');
+        
+        const activeUnitTitle = document.getElementById('activeUnitTitle');
+        const progressText = document.getElementById('progressText');
+
+        function startUnit(uniteNum, tema) {
+            currentUnitWords = vocabulary.filter(w => w.unite === uniteNum);
+            currentIndex = 0;
+            activeUnitTitle.innerText = `Ünite ${uniteNum}`;
+            
+            if(flashcard.classList.contains('is-flipped')) {
+                flashcard.classList.remove('is-flipped');
+                setTimeout(() => loadCard(), 300);
+            } else {
+                loadCard();
+            }
+            showScreen('screen-cards');
+        }
+
+        function loadCard() {
+            if(currentUnitWords.length === 0) return;
+            const data = currentUnitWords[currentIndex];
+            wordText.innerText = data.kelime;
+            sentenceFront.innerText = `"${data.cumle}"`;
+            translationText.innerText = data.anlam;
+            sentenceBack.innerText = `"${data.cumleCeviri || 'Çeviri eklenmemiş'}"`; 
+            progressText.innerText = `Kelime: ${currentIndex + 1} / ${currentUnitWords.length}`;
+        }
+
+        cardContainer.addEventListener('click', () => {
+            flashcard.classList.toggle('is-flipped');
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if(currentUnitWords.length === 0) return;
+            currentIndex++;
+            if (currentIndex >= currentUnitWords.length) { currentIndex = 0; } 
+            
+            if (flashcard.classList.contains('is-flipped')) {
+                flashcard.classList.remove('is-flipped');
+                setTimeout(() => { loadCard(); }, 300);
+            } else {
+                 loadCard();
+            }
+        });
+
+        audioBtn.addEventListener('click', () => {
+            if(currentUnitWords.length === 0) return;
+            const data = currentUnitWords[currentIndex];
+            const utterance = new SpeechSynthesisUtterance(`${data.kelime}. ${data.cumle}`);
+            utterance.lang = 'en-US'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        });
+        
+        // Çevrimdışı Çalışma (Service Worker) Bağlantısı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
