@@ -6,15 +6,9 @@ const vocabulary = [
         cumleCeviri: "Güzel ülkemize hoş geldiniz, lütfen beni takip edin." 
     },
     { 
-        seviye: "A0", unite: 1, tema: "Operasyon ve Karşılama", 
-        kelime: "Luggage", anlam: "Bagaj", 
-        cumle: "Please make sure your luggage is tagged correctly.",
-        cumleCeviri: "Lütfen bagajınızın doğru etiketlendiğinden emin olun." 
-    },
-    { 
-        seviye: "C1", unite: 26, tema: "Antik Anadolu ve Tarih Yazıcılığı", 
-        kelime: "Civilization", anlam: "Medeniyet / Uygarlık", 
-        cumle: "Ancient Anatolian civilizations left behind remarkably complex structures.",
-        cumleCeviri: "Antik Anadolu medeniyetleri geride olağanüstü karmaşık yapılar bırakmıştır." 
+        seviye: "A1", unite: 2, tema: "Müze ve Ören Yerleri", 
+        kelime: "Entrance", anlam: "Giriş", 
+        cumle: "The museum entrance is right behind that large column.",
+        cumleCeviri: "Müze girişi tam şu büyük sütunun arkasındadır." 
     }
 ];
