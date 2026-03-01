@@ -49,7 +49,8 @@ const vocabulary = [
     { unite: 1, seviye: "A0", tema: "Operasyon ve Karşılama", kelime: "Destination", anlam: "Varış noktası", cumle: "Our next destination is the ancient city of Ephesus.", cumleCeviri: "Sıradaki varış noktamız Efes antik kentidir." },
     { unite: 1, seviye: "A0", tema: "Operasyon ve Karşılama", kelime: "Review", anlam: "Gözden geçirmek / İncelemek", cumle: "Let's review the program for tomorrow morning.", cumleCeviri: "Yarın sabahın programını gözden geçirelim." },
     { unite: 1, seviye: "A0", tema: "Operasyon ve Karşılama", kelime: "Departure time", anlam: "Kalkış saati", cumle: "The departure time for the bus is 08:30.", cumleCeviri: "Otobüsün kalkış saati 08:30'dur." },
-    { unite: 1, seviye: "A0", tema: "Operasyon ve Karşılama", kelime: "Follow", anlam: "Takip etmek", cumle: "Please follow me to the parking lot.", cumleCeviri: "Lütfen beni otoparka kadar takip edin." }
+    { unite: 1, seviye: "A0", tema: "Operasyon ve Karşılama", kelime: "Follow", anlam: "Takip etmek", cumle: "Please follow me to the parking lot.", cumleCeviri: "Lütfen beni otoparka kadar takip edin." },
+
     // ÜNİTE 2: Müze ve Ören Yerleri (50 Kelime)
     { unite: 2, seviye: "A1", tema: "Müze ve Ören Yerleri", kelime: "Ancient", anlam: "Antik / Eski", cumle: "This ancient city was established thousands of years ago.", cumleCeviri: "Bu antik kent binlerce yıl önce kurulmuştur." },
     { unite: 2, seviye: "A1", tema: "Müze ve Ören Yerleri", kelime: "Civilization", anlam: "Medeniyet / Uygarlık", cumle: "Anatolia is the cradle of many great civilizations.", cumleCeviri: "Anadolu birçok büyük medeniyetin beşiğidir." },
