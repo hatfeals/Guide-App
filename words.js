@@ -102,6 +102,7 @@ const vocabulary = [
     { unite: 2, seviye: "A1", tema: "Müze ve Ören Yerleri", kelime: "Sanctuary", anlam: "Kutsal Alan / Tapınak", cumle: "Only priests were allowed to enter the inner sanctuary.", cumleCeviri: "Yalnızca rahiplerin iç kutsal alana girmesine izin verilirdi." },
     { unite: 2, seviye: "A1", tema: "Müze ve Ören Yerleri", kelime: "Shrine", anlam: "Türbe / Kutsal Yer", cumle: "Pilgrims traveled for miles to visit this holy shrine.", cumleCeviri: "Hacılar bu kutsal türbeyi ziyaret etmek için kilometrelerce yolculuk yapardı." },
     { unite: 2, seviye: "A1", tema: "Müze ve Ören Yerleri", kelime: "Historian", anlam: "Tarihçi", cumle: "Herodotus is widely considered as the father of history by modern historians.", cumleCeviri: "Herodot, modern tarihçiler tarafından geniş çapta tarihin babası olarak kabul edilir." },
+    
     // ÜNİTE 3: Restoran ve Türk Mutfağı (50 Kelime)
     { unite: 3, seviye: "A1", tema: "Restoran ve Türk Mutfağı", kelime: "Cuisine", anlam: "Mutfak (Kültürü)", cumle: "Turkish cuisine is famous for its rich flavors and variety.", cumleCeviri: "Türk mutfağı zengin lezzetleri ve çeşitliliğiyle ünlüdür." },
     { unite: 3, seviye: "A1", tema: "Restoran ve Türk Mutfağı", kelime: "Reservation", anlam: "Rezervasyon", cumle: "I made a reservation for ten people at the seafood restaurant.", cumleCeviri: "Deniz ürünleri restoranında on kişi için rezervasyon yaptırdım." },
@@ -153,6 +154,7 @@ const vocabulary = [
     { unite: 3, seviye: "A1", tema: "Restoran ve Türk Mutfağı", kelime: "Delight", anlam: "Lokum", cumle: "Turkish delight is a sweet treat often served with coffee.", cumleCeviri: "Türk lokumu genellikle kahve ile servis edilen tatlı bir ikramdır." },
     { unite: 3, seviye: "A1", tema: "Restoran ve Türk Mutfağı", kelime: "Dine", anlam: "Akşam yemeği yemek", cumle: "We will dine at a restaurant overlooking the sea tonight.", cumleCeviri: "Bu gece denize bakan bir restoranda akşam yemeği yiyeceğiz." },
     { unite: 3, seviye: "A1", tema: "Restoran ve Türk Mutfağı", kelime: "Bon appetit", anlam: "Afiyet olsun", cumle: "Enjoy your meal, bon appetit!", cumleCeviri: "Yemeğinizin tadını çıkarın, afiyet olsun!" },
+    
     // ÜNİTE 4: Alışveriş, Pazarlık ve El Sanatları (50 Kelime)
     { unite: 4, seviye: "A2", tema: "Alışveriş ve Pazarlık", kelime: "Bazaar", anlam: "Çarşı / Pazar", cumle: "The Grand Bazaar is one of the oldest covered markets in the world.", cumleCeviri: "Kapalıçarşı dünyanın en eski kapalı çarşılarından biridir." },
     { unite: 4, seviye: "A2", tema: "Alışveriş ve Pazarlık", kelime: "Souvenir", anlam: "Hediyelik eşya", cumle: "You will have an hour here to buy some souvenirs.", cumleCeviri: "Burada hediyelik eşya almak için bir saatiniz olacak." },
@@ -204,7 +206,8 @@ const vocabulary = [
     { unite: 4, seviye: "A2", tema: "Alışveriş ve Pazarlık", kelime: "Tax-free", anlam: "Vergisiz", cumle: "Don't forget to ask for a tax-free form before you leave.", cumleCeviri: "Ayrılmadan önce vergi iade (tax-free) formu istemeyi unutmayın." },
     { unite: 4, seviye: "A2", tema: "Alışveriş ve Pazarlık", kelime: "Browse", anlam: "Göz atmak", cumle: "We are just browsing right now, thank you.", cumleCeviri: "Şu an sadece göz atıyoruz, teşekkür ederiz." },
     { unite: 4, seviye: "A2", tema: "Alışveriş ve Pazarlık", kelime: "Recommend", anlam: "Tavsiye etmek", cumle: "Can you recommend a good shop for leather goods?", cumleCeviri: "Deri ürünleri için iyi bir dükkan tavsiye edebilir misiniz?" },
-]// ÜNİTE 5: Ulaşım ve Yol Tarifi (50 Kelime)
+    
+    // ÜNİTE 5: Ulaşım ve Yol Tarifi (50 Kelime)
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Direction", anlam: "Yön / İstikamet", cumle: "Are you sure we are walking in the right direction?", cumleCeviri: "Doğru yönde yürüdüğümüze emin misin?" },
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Straight", anlam: "Düz / Doğruca", cumle: "Go straight ahead for two blocks, then turn left.", cumleCeviri: "İki blok boyunca dümdüz gidin, sonra sola dönün." },
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Right", anlam: "Sağ", cumle: "Turn right at the traffic lights.", cumleCeviri: "Trafik lambalarından sağa dönün." },
@@ -255,3 +258,4 @@ const vocabulary = [
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Roundabout", anlam: "Döner kavşak / Göbek", cumle: "Take the third exit at the roundabout to go to the museum.", cumleCeviri: "Müzeye gitmek için döner kavşaktaki üçüncü çıkıştan girin." },
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Sidewalk", anlam: "Kaldırım", cumle: "For your safety, please stay on the sidewalk while walking.", cumleCeviri: "Güvenliğiniz için yürürken lütfen kaldırımda kalın." },
     { unite: 5, seviye: "A2", tema: "Ulaşım ve Yol Tarifi", kelime: "Underground", anlam: "Yeraltı / Altgeçit", cumle: "We need to use the underground passage to cross the street.", cumleCeviri: "Caddeyi geçmek için yeraltı geçidini kullanmamız gerekiyor." }
+];
