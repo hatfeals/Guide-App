@@ -1,16 +1,14 @@
-const CACHE_NAME = 'guide-smart-v2'; // Versiyonu v2 yaptık tertemiz başlasın
+const CACHE_NAME = 'guide-smart-v3'; 
 
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
-  '/app.js',
   '/words.js',
   '/icon.png',
   '/manifest.json'
 ];
 
-// Kurulum
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
@@ -18,7 +16,6 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Temizlik
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -32,7 +29,6 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Akıllı Yakalama (Sihir Burada)
 self.addEventListener('fetch', event => {
   if (!(event.request.url.startsWith('http'))) return;
 
