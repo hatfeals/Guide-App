@@ -1,163 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rehber Asistanı PWA</title>
     
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
     <link rel="apple-touch-icon" href="icon.png">
-    
-    <title>Rehber Asistanı</title>
-    
+    <link rel="stylesheet" href="style.css">
+
     <style>
-        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow: hidden; }
-        .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; padding: 20px; overflow-y: auto; }
-        .screen.active { display: flex; }
-        .header { width: 100%; max-width: 400px; display: flex; align-items: center; padding: 20px 0; margin-bottom: 20px; position: relative; }
-        .back-btn { background: none; border: none; color: #D4AF37; font-size: 16px; font-weight: bold; cursor: pointer; padding: 10px; position: absolute; left: 0; z-index: 100; }
-        .screen-title { width: 100%; text-align: center; font-size: 20px; font-weight: bold; }
-        .menu-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 20px; margin-top: 30px; }
-        .menu-card { background-color: #1E1E1E; border-radius: 20px; padding: 30px 20px; text-align: center; border: 1px solid #333; cursor: pointer; transition: transform 0.1s; }
-        .menu-card:active { background-color: #252525; transform: scale(0.98); }
-        .menu-card h2 { margin: 0 0 10px 0; color: #D4AF37; font-size: 24px; }
-        .menu-card p { margin: 0; color: #A0A0A0; font-size: 14px; }
-        .disabled { opacity: 0.5; pointer-events: none; }
-        .unit-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 40px; }
-        .unit-item { background-color: #1E1E1E; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; cursor: pointer; }
-        .unit-item:active { background-color: #252525; }
-        .unit-level { background-color: #D4AF37; color: #121212; font-weight: bold; padding: 5px 12px; border-radius: 8px; font-size: 14px; }
-        .flashcard-container { width: 100%; max-width: 400px; height: 50vh; perspective: 1000px; margin-top: 20px; }
-        .flashcard { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
-        .flashcard.is-flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; background-color: #1E1E1E; border-radius: 20px; border: 1px solid #333; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
-        .card-back { transform: rotateY(180deg); }
-        .word { font-size: 42px; font-weight: 800; }
-        .translation { font-size: 32px; color: #D4AF37; margin-bottom: 25px; font-weight: bold; }
-        .sentence { font-size: 18px; font-style: italic; color: #CCCCCC; line-height: 1.5; margin-top: 20px; }
-        .controls { margin-top: 30px; display: flex; gap: 15px; width: 100%; max-width: 400px; }
-        .btn { background-color: #D4AF37; color: #121212; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; flex-grow: 1; }
-        .btn:active { background-color: #bfa032; }
-        .btn-audio { flex-grow: 0; width: 65px; font-size: 24px; }
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f6fa; }
+        .ana-menu { display: flex; justify-content: space-around; background-color: #34495e; padding: 10px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .ana-menu button { background-color: transparent; color: white; border: none; padding: 10px 15px; font-size: 16px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+        .ana-menu button.aktif { border-bottom: 3px solid #3498db; font-weight: bold; color: #3498db; }
+        .sekme-icerik { padding: 15px; }
+        .pdf-listesi { list-style-type: none; padding: 0; margin: 0; }
+        .pdf-listesi li { margin-bottom: 15px; }
+        .pdf-buton { display: block; background-color: #e74c3c; color: white; padding: 18px; text-decoration: none; border-radius: 10px; font-size: 16px; font-weight: bold; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+        .pdf-buton:active { transform: scale(0.98); background-color: #c0392b; }
     </style>
 </head>
 <body>
-    <div id="screen-home" class="screen active">
-        <div class="header"><div class="screen-title">Rehber Asistanı</div></div>
-        <div class="menu-container">
-            <div class="menu-card" id="btn-open-dict"><h2>📖 Mesleki Sözlük</h2><p>A0'dan C2'ye Üniteler</p></div>
-            <div class="menu-card disabled"><h2>📚 Kütüphane</h2><p>Yakında</p></div>
-            <div class="menu-card disabled"><h2>🗺️ Tur Rotaları</h2><p>Yakında</p></div>
-        </div>
-    </div>
-    
-    <div id="screen-units" class="screen">
-        <div class="header"><button class="back-btn" onclick="showScreen('screen-home')">◄ Geri</button><div class="screen-title">Üniteler</div></div>
-        <div id="unitListContainer" class="unit-list"></div>
-    </div>
-    
-    <div id="screen-cards" class="screen">
-        <div class="header"><button class="back-btn" onclick="showScreen('screen-units')">◄ Üniteler</button><div id="activeUnitTitle" class="screen-title">Ünite</div></div>
-        <div class="flashcard-container">
-            <div class="flashcard" id="flashcard">
-                <div class="card-face">
-                    <div class="word" id="wordText">...</div>
-                    <div class="sentence" id="sentenceFront">...</div>
-                </div>
-                <div class="card-face card-back">
-                    <div class="translation" id="translationText">...</div>
-                    <div class="sentence" id="sentenceBack" style="color:#A0A0A0">...</div>
-                </div>
-            </div>
-        </div>
-        <div id="progressText" style="margin-top:15px; color:#A0A0A0; font-size: 14px;">...</div>
-        <div class="controls">
-            <button class="btn btn-audio" id="audioBtn">🔊</button>
-            <button class="btn" id="nextBtn">Sonraki Kelime</button>
-        </div>
-    </div>
+
+    <header style="text-align: center; padding: 20px; background-color: #2c3e50; color: white;">
+        <h1 style="margin: 0; font-size: 22px;">Rehber Asistanı</h1>
+        <p style="margin: 5px 0 0 0; font-size: 13px; color: #bdc3c7;">1500 Kelime & Akıllı Kütüphane</p>
+    </header>
+
+    <nav class="ana-menu">
+        <button onclick="sekmeGoster('sozluk')" id="btn-sozluk" class="aktif">📖 Sözlük</button>
+        <button onclick="sekmeGoster('kutuphane')" id="btn-kutuphane">📂 Kütüphane</button>
+        <button onclick="sekmeGoster('rotalar')" id="btn-rotalar">📍 Rotalar</button>
+    </nav>
+
+    <section id="sozluk" class="sekme-icerik" style="display: block;">
+        <div id="app"></div>
+    </section>
+
+    <section id="kutuphane" class="sekme-icerik" style="display: none;">
+        <h2 style="color: #2c3e50;">📂 Çevrimdışı Kitaplık</h2>
+        <p style="color: #7f8c8d; font-size: 14px; margin-bottom: 20px;">Kitabı bir kez açtığınızda telefonunuza kaydedilir ve internet yokken de çalışır.</p>
+        
+        <ul class="pdf-listesi">
+            <li>
+                <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-buton">
+                    🏺 Anadolu Uygarlıkları Tarihi (PDF)
+                </a>
+            </li>
+            </ul>
+    </section>
+
+    <section id="rotalar" class="sekme-icerik" style="display: none;">
+        <h2 style="color: #2c3e50;">📍 Tur Rotaları</h2>
+        <p style="color: #7f8c8d;">Yakında: GPS destekli Likya Yolu ve Kültür Rotaları...</p>
+    </section>
 
     <script src="words.js"></script>
+    <script src="app.js"></script>
+
     <script>
-        function showScreen(sId) { 
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-            document.getElementById(sId).classList.add('active'); 
-        }
-        
-        document.getElementById('btn-open-dict').onclick = () => { 
-            renderUnits(); 
-            showScreen('screen-units'); 
-        };
-        
-        function renderUnits() {
-            const cont = document.getElementById('unitListContainer');
-            cont.innerHTML = '';
-            const unitMap = new Map();
-            if (typeof vocabulary === 'undefined') {
-                cont.innerHTML = '<p style="text-align:center;color:red;">Kelimeler yüklenemedi. words.js dosyasını kontrol et.</p>';
-                return;
-            }
-            vocabulary.forEach(v => { 
-                if(!unitMap.has(v.unite)) unitMap.set(v.unite, {s:v.seviye, t:v.tema, c:0}); 
-                unitMap.get(v.unite).c++; 
-            });
-            Array.from(unitMap.keys()).sort((a,b)=>a-b).forEach(uNum => {
-                const d = unitMap.get(uNum);
-                const item = document.createElement('div');
-                item.className = 'unit-item';
-                item.innerHTML = `<div><h3>Ünite ${uNum}: ${d.t}</h3><p>${d.c} Kelime</p></div><div class="unit-level">${d.s}</div>`;
-                item.onclick = () => startUnit(uNum);
-                cont.appendChild(item);
-            });
+        function sekmeGoster(sekmeId) {
+            document.querySelectorAll('.sekme-icerik').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.ana-menu button').forEach(el => el.classList.remove('aktif'));
+            document.getElementById(sekmeId).style.display = 'block';
+            document.getElementById('btn-' + sekmeId).classList.add('aktif');
+            window.scrollTo(0,0);
         }
 
-        let curWords = [], curIdx = 0;
-        const flashcard = document.getElementById('flashcard');
-        
-        function startUnit(uNum) {
-            curWords = vocabulary.filter(v => v.unite === uNum);
-            curIdx = 0;
-            document.getElementById('activeUnitTitle').innerText = `Ünite ${uNum}`;
-            if(flashcard.classList.contains('is-flipped')) flashcard.classList.remove('is-flipped');
-            loadCard(); 
-            showScreen('screen-cards');
-        }
-        
-        function loadCard() {
-            if(curWords.length === 0) return;
-            const d = curWords[curIdx];
-            document.getElementById('wordText').innerText = d.kelime;
-            document.getElementById('sentenceFront').innerText = `"${d.cumle}"`;
-            document.getElementById('translationText').innerText = d.anlam;
-            document.getElementById('sentenceBack').innerText = `"${d.cumleCeviri}"`;
-            document.getElementById('progressText').innerText = `Kelime: ${curIdx + 1} / ${curWords.length}`;
-        }
-        
-        document.getElementById('flashcard').parentNode.onclick = () => flashcard.classList.toggle('is-flipped');
-        
-        document.getElementById('nextBtn').onclick = () => {
-            curIdx = (curIdx + 1) % curWords.length;
-            if(flashcard.classList.contains('is-flipped')) { 
-                flashcard.classList.remove('is-flipped'); 
-                setTimeout(loadCard, 300); 
-            } else {
-                loadCard();
-            }
-        };
-        
-        document.getElementById('audioBtn').onclick = (e) => {
-            e.stopPropagation();
-            const d = curWords[curIdx];
-            const u = new SpeechSynthesisUtterance(`${d.kelime}. ${d.cumle}`);
-            u.lang = 'en-US'; 
-            u.rate = 0.8; 
-            window.speechSynthesis.speak(u);
-        };
-        
-        if ('serviceWorker' in navigator) { 
-            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js')); 
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Sistem Hazır!'))
+                    .catch(err => console.log('Hata:', err));
+            });
         }
     </script>
 </body>
