@@ -9,18 +9,14 @@
     <meta name="theme-color" content="#121212">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <link rel="stylesheet" href="style.css">
-
     <style>
-        /* Koyu Tema ve Sekme Düzenlemeleri */
+        /* KOYU TEMA VE TASARIM */
         body { 
-            background-color: #121212; /* Koyu arka plan */
+            background-color: #121212; 
             color: #ffffff; 
             margin: 0; 
-            padding: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif; 
         }
-        
         .ana-menu { 
             display: flex; 
             justify-content: space-around; 
@@ -31,36 +27,51 @@
             z-index: 1000; 
             border-bottom: 1px solid #333;
         }
-        
         .ana-menu button { 
             background-color: transparent; 
-            color: #bbbbbb; 
+            color: #888; 
             border: none; 
             padding: 10px; 
-            font-size: 14px; 
+            font-size: 16px; 
             cursor: pointer;
         }
-        
         .ana-menu button.aktif { 
             color: #3498db; 
             border-bottom: 2px solid #3498db; 
             font-weight: bold; 
         }
-
-        .sekme-icerik { padding: 10px; }
+        .sekme-icerik { padding: 15px; }
         
+        /* Ünite ve Kelime Kartları */
+        .unite-baslik { 
+            background-color: #2980b9; 
+            padding: 15px; 
+            margin-top: 20px; 
+            border-radius: 8px; 
+            font-size: 18px;
+        }
+        .kelime-kart { 
+            background-color: #1e1e1e; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 8px; 
+            border-left: 4px solid #3498db;
+        }
+        .ingilizce { color: #3498db; font-size: 18px; font-weight: bold; }
+        .turkce { color: #f1c40f; font-size: 16px; }
+        .ornek { font-style: italic; color: #bdc3c7; font-size: 14px; margin-top: 5px; }
+
         /* Kütüphane Butonları */
         .pdf-listesi { list-style: none; padding: 0; }
         .pdf-buton { 
             display: block; 
-            background-color: #2c3e50; 
+            background-color: #c0392b; 
             color: white; 
             padding: 20px; 
             margin-bottom: 10px; 
             text-decoration: none; 
-            border-radius: 12px; 
+            border-radius: 10px; 
             text-align: center;
-            border-left: 5px solid #e74c3c;
             font-weight: bold;
         }
     </style>
@@ -74,7 +85,7 @@
     </nav>
 
     <section id="sozluk" class="sekme-icerik">
-        <div id="app"></div> 
+        <div id="sozluk-liste"></div>
     </section>
 
     <section id="kutuphane" class="sekme-icerik" style="display: none;">
@@ -82,7 +93,7 @@
         <ul class="pdf-listesi">
             <li>
                 <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-buton">
-                    🏺 Anadolu Uygarlıkları Tarihi
+                    🏺 Anadolu Uygarlıkları Tarihi (PDF)
                 </a>
             </li>
         </ul>
@@ -90,31 +101,50 @@
 
     <section id="rotalar" class="sekme-icerik" style="display: none;">
         <h2 style="text-align:center;">Tur Rotaları</h2>
-        <p style="text-align:center; color: #888;">Yakında eklenecek...</p>
+        <p style="text-align:center; color: #666;">Yakında...</p>
     </section>
 
     <script src="words.js"></script>
-    <script src="app.js"></script>
 
     <script>
-        // Sekme değiştirme fonksiyonu
+        // 1. KELİMELERİ EKRANA BASAN MOTOR (Sözlüğü geri getiren kısım burası!)
+        function sozlukBas() {
+            const liste = document.getElementById('sozluk-liste');
+            let html = '';
+            let mevcutUnite = 0;
+
+            words.forEach(k => {
+                if (k.unite !== mevcutUnite) {
+                    mevcutUnite = k.unite;
+                    html += `<div class="unite-baslik">Ünite ${mevcutUnite}: ${k.tema}</div>`;
+                }
+                html += `
+                    <div class="kelime-kart">
+                        <div class="ingilizce">${k.kelime}</div>
+                        <div class="turkce">${k.anlam}</div>
+                        <div class="ornek">${k.cumle}</div>
+                        <div class="ornek" style="color:#7f8c8d">${k.cumleCeviri}</div>
+                    </div>
+                `;
+            });
+            liste.innerHTML = html;
+        }
+
+        // 2. SEKME YÖNETİMİ
         function sekmeGoster(sekmeId) {
             document.querySelectorAll('.sekme-icerik').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.ana-menu button').forEach(el => el.classList.remove('aktif'));
             document.getElementById(sekmeId).style.display = 'block';
             document.getElementById('btn-' + sekmeId).classList.add('aktif');
-            
-            // Eğer sözlük sekmesine dönülürse app.js'in çalışmasını tetikleyebiliriz
-            if(sekmeId === 'sozluk') {
-                // app.js zaten sayfa yüklendiğinde çalışıyor olacak
-            }
+            window.scrollTo(0,0);
         }
+
+        // Sayfa açıldığında sözlüğü bas
+        window.onload = sozlukBas;
 
         // Service Worker Kaydı
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
-            });
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
