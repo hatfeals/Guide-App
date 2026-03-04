@@ -10,13 +10,14 @@
     <link rel="apple-touch-icon" href="icon.png">
     
     <style>
-        /* KOYU TEMA VE TASARIM */
+        /* TAM KOYU TEMA TASARIMI */
         body { 
             background-color: #121212; 
             color: #ffffff; 
             margin: 0; 
-            font-family: sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
         }
+        
         .ana-menu { 
             display: flex; 
             justify-content: space-around; 
@@ -27,52 +28,64 @@
             z-index: 1000; 
             border-bottom: 1px solid #333;
         }
+
         .ana-menu button { 
             background-color: transparent; 
             color: #888; 
             border: none; 
             padding: 10px; 
-            font-size: 16px; 
+            font-size: 15px; 
             cursor: pointer;
+            transition: 0.3s;
         }
+
         .ana-menu button.aktif { 
             color: #3498db; 
             border-bottom: 2px solid #3498db; 
             font-weight: bold; 
         }
-        .sekme-icerik { padding: 15px; }
-        
-        /* Ünite ve Kelime Kartları */
+
+        .sekme-icerik { padding: 10px; }
+
+        /* SÖZLÜK KARTLARI (Senin Eski Sevdiğin Stil) */
         .unite-baslik { 
-            background-color: #2980b9; 
+            background: linear-gradient(90deg, #2980b9, #2c3e50);
             padding: 15px; 
-            margin-top: 20px; 
+            margin: 25px 0 10px 0; 
             border-radius: 8px; 
+            font-weight: bold;
             font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
+
         .kelime-kart { 
             background-color: #1e1e1e; 
             padding: 15px; 
             margin: 10px 0; 
-            border-radius: 8px; 
-            border-left: 4px solid #3498db;
+            border-radius: 10px; 
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .ingilizce { color: #3498db; font-size: 18px; font-weight: bold; }
-        .turkce { color: #f1c40f; font-size: 16px; }
-        .ornek { font-style: italic; color: #bdc3c7; font-size: 14px; margin-top: 5px; }
 
-        /* Kütüphane Butonları */
+        .ingilizce { color: #3498db; font-size: 19px; font-weight: bold; margin-bottom: 3px; }
+        .turkce { color: #f1c40f; font-size: 16px; margin-bottom: 8px; font-weight: 500; }
+        .ornek { font-style: italic; color: #bdc3c7; font-size: 14px; line-height: 1.4; }
+        .ceviri { color: #7f8c8d; font-size: 13px; margin-top: 4px; }
+
+        /* KÜTÜPHANE BUTONLARI */
         .pdf-listesi { list-style: none; padding: 0; }
         .pdf-buton { 
             display: block; 
-            background-color: #c0392b; 
+            background: #c0392b; 
             color: white; 
             padding: 20px; 
-            margin-bottom: 10px; 
+            margin-bottom: 12px; 
             text-decoration: none; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             text-align: center;
             font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -85,11 +98,11 @@
     </nav>
 
     <section id="sozluk" class="sekme-icerik">
-        <div id="sozluk-liste"></div>
+        <div id="sozluk-motoru"></div>
     </section>
 
     <section id="kutuphane" class="sekme-icerik" style="display: none;">
-        <h2 style="text-align:center;">Kitaplık</h2>
+        <h2 style="text-align:center; margin-bottom: 20px;">Dijital Kitaplık</h2>
         <ul class="pdf-listesi">
             <li>
                 <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-buton">
@@ -100,49 +113,60 @@
     </section>
 
     <section id="rotalar" class="sekme-icerik" style="display: none;">
-        <h2 style="text-align:center;">Tur Rotaları</h2>
-        <p style="text-align:center; color: #666;">Yakında...</p>
+        <h2 style="text-align:center; color: #555;">📍 Tur Rotaları</h2>
+        <p style="text-align:center; color: #444; margin-top: 50px;">Yakında eklenecek...</p>
     </section>
 
     <script src="words.js"></script>
 
     <script>
-        // 1. KELİMELERİ EKRANA BASAN MOTOR (Sözlüğü geri getiren kısım burası!)
-        function sozlukBas() {
-            const liste = document.getElementById('sozluk-liste');
+        // SÖZLÜĞÜ EKRANA BASAN ANA MOTOR
+        function sozlukOlustur() {
+            const container = document.getElementById('sozluk-motoru');
+            if (!window.words) {
+                container.innerHTML = "<p style='color:red'>Hata: words.js yüklenemedi!</p>";
+                return;
+            }
+
             let html = '';
-            let mevcutUnite = 0;
+            let sonUnite = -1;
 
             words.forEach(k => {
-                if (k.unite !== mevcutUnite) {
-                    mevcutUnite = k.unite;
-                    html += `<div class="unite-baslik">Ünite ${mevcutUnite}: ${k.tema}</div>`;
+                // Yeni ünite başlığı
+                if (k.unite !== sonUnite) {
+                    sonUnite = k.unite;
+                    html += `<div class="unite-baslik">Ünite ${k.unite}: ${k.tema}</div>`;
                 }
+
+                // Kelime kartı
                 html += `
                     <div class="kelime-kart">
                         <div class="ingilizce">${k.kelime}</div>
                         <div class="turkce">${k.anlam}</div>
                         <div class="ornek">${k.cumle}</div>
-                        <div class="ornek" style="color:#7f8c8d">${k.cumleCeviri}</div>
+                        <div class="ceviri">${k.cumleCeviri}</div>
                     </div>
                 `;
             });
-            liste.innerHTML = html;
+            container.innerHTML = html;
         }
 
-        // 2. SEKME YÖNETİMİ
-        function sekmeGoster(sekmeId) {
-            document.querySelectorAll('.sekme-icerik').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.ana-menu button').forEach(el => el.classList.remove('aktif'));
-            document.getElementById(sekmeId).style.display = 'block';
-            document.getElementById('btn-' + sekmeId).classList.add('aktif');
+        // SEKME GEÇİŞ FONKSİYONU
+        function sekmeGoster(id) {
+            document.querySelectorAll('.sekme-icerik').forEach(s => s.style.display = 'none');
+            document.querySelectorAll('.ana-menu button').forEach(b => b.classList.remove('aktif'));
+            
+            document.getElementById(id).style.display = 'block';
+            document.getElementById('btn-' + id).classList.add('aktif');
             window.scrollTo(0,0);
         }
 
-        // Sayfa açıldığında sözlüğü bas
-        window.onload = sozlukBas;
+        // SAYFA YÜKLENDİĞİNDE ÇALIŞTIR
+        window.onload = function() {
+            sozlukOlustur();
+        };
 
-        // Service Worker Kaydı
+        // SERVICE WORKER KAYDI
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
