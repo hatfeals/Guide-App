@@ -71,7 +71,6 @@
         .card-front { background: #111; }
         .card-back { background: #0a0a0a; transform: rotateY(180deg); border-color: var(--accent-gold); }
 
-        /* Gri Yazılar Kaldırıldı, Beyaz Yapıldı */
         .eng-word { color: var(--primary-blue); font-size: 38px; font-weight: 900; margin-bottom: 10px; }
         .eng-sentence { color: #ffffff; font-size: 20px; line-height: 1.4; font-style: italic; max-width: 90%; }
         .tr-word { color: var(--accent-gold); font-size: 34px; font-weight: 900; margin-bottom: 10px; }
@@ -95,7 +94,7 @@
         <div class="logo-area">
             <div style="font-size: 60px;">🌍</div>
             <h1>GUIDE-APP</h1>
-            </div>
+        </div>
         <div class="ana-btn" onclick="ekran('unite-listesi')">Sözlük</div>
         <div class="ana-btn" onclick="ekran('kutuphane')">Kitaplık</div>
         <div class="ana-btn" onclick="ekran('rotalar')">Rotalar</div>
@@ -212,9 +211,31 @@
 
         function sonrakiKart() { if (mevcutIndeks < mevcutListe.length - 1) { mevcutIndeks++; kartGoster(); } }
         function oncekiKart() { if (mevcutIndeks > 0) { mevcutIndeks--; kartGoster(); } }
-        function konus(m) { const ut = new SpeechSynthesisUtterance(m); ut.lang = 'en-US'; window.speechSynthesis.speak(ut); }
 
-        window.onload = () => { uniteleriBas(); if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); };
+        // SIRI AKSAN DÜZELTME [cite: 2026-02-21]
+        function konus(m) {
+            window.speechSynthesis.cancel(); // Önceki okumayı durdur
+            const ut = new SpeechSynthesisUtterance(m);
+            const voices = window.speechSynthesis.getVoices();
+            
+            // İngilizce (en-US veya en-GB) bir ses bul
+            const engVoice = voices.find(v => v.lang.startsWith('en-')) || voices.find(v => v.lang.includes('en'));
+            
+            if (engVoice) {
+                ut.voice = engVoice;
+            }
+            
+            ut.lang = 'en-US';
+            ut.rate = 0.9; // Daha net anlaşılması için hafif yavaşlatıldı [cite: 2026-02-20]
+            window.speechSynthesis.speak(ut);
+        }
+
+        window.onload = () => { 
+            uniteleriBas(); 
+            // Seslerin yüklenmesi için getVoices'i bir kez tetikle
+            window.speechSynthesis.getVoices();
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); 
+        };
     </script>
 </body>
 </html>
