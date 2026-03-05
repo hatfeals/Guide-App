@@ -1,6 +1,6 @@
 {
-  "short_name": "RehberSözlük",
-  "name": "Turist Rehberi Mesleki Sözlük",
+  "short_name": "Guide-app",
+  "name": "Guide-app Vocabulary",
   "icons": [
     {
       "src": "icon.png",
@@ -13,9 +13,9 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/index.html",
-  "background_color": "#121212",
+  "start_url": "./index.html",
   "display": "standalone",
-  "scope": "/",
-  "theme_color": "#121212"
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "scope": "./"
 }
