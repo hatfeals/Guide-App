@@ -3,164 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rehber Asistanı PWA</title>
+    <title>Rehber Asistanı v2.0</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <link rel="apple-touch-icon" href="icon.png">
-    
+
     <style>
-        /* TAM KOYU TEMA TASARIMI */
-        body { 
-            background-color: #121212; 
-            color: #ffffff; 
-            margin: 0; 
-            font-family: -apple-system, system-ui, sans-serif; 
+        /* SIFIRDAN DARK MODE TASARIMI */
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --primary-blue: #3498db;
+            --accent-gold: #f1c40f;
+            --text-main: #ffffff;
+            --text-dim: #b3b3b3;
         }
-        
-        /* Sekme Menüsü */
-        .ana-menu { 
-            display: flex; 
-            justify-content: space-around; 
-            background-color: #1e1e1e; 
-            padding: 10px 0; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 3 SÜTUNLU ANA MENÜ (TABS) */
+        .tab-bar {
+            display: flex;
+            background-color: #1a1a1a;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             border-bottom: 1px solid #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        .ana-menu button { 
-            background-color: transparent; 
-            color: #888; 
-            border: none; 
-            padding: 10px; 
-            font-size: 15px; 
+        .tab-bar button {
+            flex: 1;
+            padding: 15px 0;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        .ana-menu button.aktif { 
-            color: #3498db; 
-            border-bottom: 2px solid #3498db; 
-            font-weight: bold; 
+        .tab-bar button.active {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--primary-blue);
         }
 
-        .sekme-icerik { padding: 15px; }
+        .content-section {
+            padding: 15px;
+            display: none; /* Varsayılan gizli */
+        }
 
-        /* SÖZLÜK KARTLARI */
-        .unite-baslik { 
-            background: linear-gradient(90deg, #2980b9, #2c3e50);
-            padding: 15px; 
-            margin: 25px 0 10px 0; 
-            border-radius: 10px; 
-            font-weight: bold;
+        .content-section.active {
+            display: block;
+        }
+
+        /* SÖZLÜK TASARIMI (Üniteler) */
+        .unite-header {
+            background: linear-gradient(135deg, #2980b9, #2c3e50);
+            padding: 12px 15px;
+            margin: 20px 0 10px 0;
+            border-radius: 8px;
             font-size: 18px;
-        }
-
-        .kelime-kart { 
-            background-color: #1e1e1e; 
-            padding: 15px; 
-            margin: 12px 0; 
-            border-radius: 12px; 
-            border-left: 5px solid #3498db;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .ingilizce { color: #3498db; font-size: 19px; font-weight: bold; margin-bottom: 4px; }
-        .turkce { color: #f1c40f; font-size: 16px; margin-bottom: 8px; font-weight: 500; }
-        .ornek { font-style: italic; color: #bdc3c7; font-size: 14px; line-height: 1.4; }
-        .ceviri { color: #7f8c8d; font-size: 13px; margin-top: 4px; }
-
-        /* KÜTÜPHANE */
-        .pdf-listesi { list-style: none; padding: 0; }
-        .pdf-buton { 
-            display: block; 
-            background: #c0392b; 
-            color: white; 
-            padding: 20px; 
-            margin-bottom: 15px; 
-            text-decoration: none; 
-            border-radius: 12px; 
-            text-align: center;
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .kelime-kart {
+            background-color: var(--card-bg);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .word-eng { color: var(--primary-blue); font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .word-tr { color: var(--accent-gold); font-size: 16px; margin-bottom: 8px; font-weight: 500; }
+        .word-example { font-style: italic; color: #95a5a6; font-size: 14px; line-height: 1.4; }
+        .word-meaning { color: #7f8c8d; font-size: 13px; margin-top: 4px; border-top: 1px solid #333; padding-top: 4px; }
+
+        /* KÜTÜPHANE TASARIMI (Sütunlar) */
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobilde tek sütun */
+            gap: 15px;
+        }
+
+        .pdf-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            border: 1px solid #333;
+            transition: 0.2s;
+        }
+
+        .pdf-card:active { transform: scale(0.95); background-color: #252525; }
+        .pdf-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+
+        /* ROTALAR */
+        .coming-soon {
+            text-align: center;
+            margin-top: 100px;
+            color: var(--text-dim);
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-    <nav class="ana-menu">
-        <button onclick="sekmeGoster('sozluk')" id="btn-sozluk" class="aktif">📖 SÖZLÜK</button>
-        <button onclick="sekmeGoster('kutuphane')" id="btn-kutuphane">📂 KÜTÜPHANE</button>
-        <button onclick="sekmeGoster('rotalar')" id="btn-rotalar">📍 ROTALAR</button>
+    <nav class="tab-bar">
+        <button onclick="switchTab('sozluk')" id="tab-sozluk" class="active">Sözlük</button>
+        <button onclick="switchTab('kutuphane')" id="tab-kutuphane">Kütüphane</button>
+        <button onclick="switchTab('rotalar')" id="tab-rotalar">Rotalar</button>
     </nav>
 
-    <section id="sozluk" class="sekme-icerik">
-        <div id="sozluk-liste"></div>
+    <main id="sozluk" class="content-section active">
+        <div id="dictionary-container">
+            <p style="text-align:center; margin-top:50px;">Kelimeler yükleniyor...</p>
+        </div>
+    </main>
+
+    <section id="kutuphane" class="content-section">
+        <h2 style="margin-bottom:20px;">Kitaplık</h2>
+        <div class="pdf-grid">
+            <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-card">
+                <span class="pdf-icon">🏺</span>
+                <strong>Anadolu Uygarlıkları Tarihi</strong>
+                <div style="font-size:12px; color:#888; margin-top:5px;">PDF Belgesi</div>
+            </a>
+            </div>
     </section>
 
-    <section id="kutuphane" class="sekme-icerik" style="display: none;">
-        <h2 style="text-align:center;">Kitaplık</h2>
-        <ul class="pdf-listesi">
-            <li>
-                <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-buton">
-                    🏺 Anadolu Uygarlıkları Tarihi (PDF)
-                </a>
-            </li>
-        </ul>
-    </section>
-
-    <section id="rotalar" class="sekme-icerik" style="display: none;">
-        <h2 style="text-align:center; color: #444;">📍 Tur Rotaları</h2>
-        <p style="text-align:center; color: #666; margin-top: 50px;">Yakında eklenecek...</p>
+    <section id="rotalar" class="content-section">
+        <div class="coming-soon">
+            <p style="font-size: 40px;">📍</p>
+            <p>Tur Rotaları Kısmı Yakında Eklenecek...</p>
+        </div>
     </section>
 
     <script src="words.js"></script>
 
     <script>
-        // KELİMELERİ EKRANA BASAN MOTOR
-        function sozlukOlustur() {
-            const container = document.getElementById('sozluk-liste');
+        // 1. SÖZLÜK OLUŞTURUCU (WORDS.JS OKUYUCU)
+        function initDictionary() {
+            const container = document.getElementById('dictionary-container');
+            
+            // words.js yüklenmiş mi kontrol et
             if (typeof words === 'undefined') {
-                container.innerHTML = "<p style='color:red; text-align:center;'>Hata: words.js bulunamadı!</p>";
+                container.innerHTML = `
+                    <div style="color: #e74c3c; padding: 20px; text-align: center;">
+                        <h3>Hata: words.js dosyası bulunamadı!</h3>
+                        <p>GitHub'da words.js dosyasının adını ve içeriğini kontrol et.</p>
+                    </div>`;
                 return;
             }
 
-            let html = '';
-            let sonUnite = -1;
+            let htmlContent = '';
+            let lastUnit = -1;
 
-            words.forEach(k => {
-                if (k.unite !== sonUnite) {
-                    sonUnite = k.unite;
-                    html += `<div class="unite-baslik">Ünite ${k.unite}: ${k.tema}</div>`;
+            words.forEach(item => {
+                // Yeni ünite başlığı ekle
+                if (item.unite !== lastUnit) {
+                    lastUnit = item.unite;
+                    htmlContent += `<div class="unite-header">Ünite ${item.unite}: ${item.tema}</div>`;
                 }
-                html += `
+
+                // Kelime kartını oluştur
+                htmlContent += `
                     <div class="kelime-kart">
-                        <div class="ingilizce">${k.kelime}</div>
-                        <div class="turkce">${k.anlam}</div>
-                        <div class="ornek">${k.cumle}</div>
-                        <div class="ceviri">${k.cumleCeviri}</div>
+                        <div class="word-eng">${item.kelime}</div>
+                        <div class="word-tr">${item.anlam}</div>
+                        <div class="word-example">${item.cumle}</div>
+                        <div class="word-meaning">${item.cumleCeviri}</div>
                     </div>
                 `;
             });
-            container.innerHTML = html;
+
+            container.innerHTML = htmlContent;
         }
 
-        // SEKME GEÇİŞİ
-        function sekmeGoster(id) {
-            document.querySelectorAll('.sekme-icerik').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.ana-menu button').forEach(b => b.classList.remove('aktif'));
-            document.getElementById(id).style.display = 'block';
-            document.getElementById('btn-' + id).classList.add('aktif');
-            window.scrollTo(0,0);
+        // 2. SEKME DEĞİŞTİRME MANTIĞI
+        function switchTab(tabId) {
+            // Tüm bölümleri gizle
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            // Tüm butonları inaktif yap
+            document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+
+            // Seçileni göster
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // Sayfayı en üste kaydır
+            window.scrollTo(0, 0);
         }
 
-        // BAŞLAT
-        window.onload = sozlukOlustur;
-
-        // SERVICE WORKER KAYDI
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+        // 3. SAYFA YÜKLENDİĞİNDE BAŞLAT
+        window.onload = function() {
+            initDictionary();
+            
+            // Service Worker Kaydı (Senin sw.js dosyanı kullanır)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Rehber Asistanı Aktif!"))
+                .catch(err => console.error("SW Hatası:", err));
+            }
+        };
     </script>
 </body>
 </html>
