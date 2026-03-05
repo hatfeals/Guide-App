@@ -34,7 +34,7 @@
             text-align: center; cursor: pointer; transition: 0.3s; font-size: 16px; text-decoration: none;
         }
 
-        /* ÜNİTE LİSTESİ (KART YAPISI) */
+        /* ÜNİTE LİSTESİ */
         #unite-listesi { display: none; padding: 20px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
         .search-container { padding: 10px 0; position: sticky; top: 0; background: var(--bg-color); z-index: 10; width: 90vw; max-width: 600px; margin: 0 auto; }
         .search-input {
@@ -43,19 +43,14 @@
         }
 
         .unite-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; padding-bottom: 60px; width: 90vw; max-width: 600px; margin-left: auto; margin-right: auto; }
-        
-        /* Ünite Butonları Artık Birer Geniş Kart */
         .unite-card { 
             background: #111; padding: 25px; border-radius: 20px; border: 1px solid #333; 
             color: white; cursor: pointer; text-align: left; transition: 0.3s;
             display: flex; flex-direction: column; gap: 5px;
         }
-        .unite-card:active { transform: scale(0.98); background: #1a1a1a; border-color: var(--primary-blue); }
-        .unite-card .u-num { color: var(--primary-blue); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .unite-card:active { transform: scale(0.98); background: #1a1a1a; }
+        .unite-card .u-num { color: var(--primary-blue); font-size: 12px; font-weight: 900; text-transform: uppercase; }
         .unite-card .u-name { font-size: 20px; font-weight: 800; }
-
-        .fav-unite-btn { border-color: var(--accent-gold); }
-        .fav-unite-btn .u-num { color: var(--accent-gold); }
 
         /* KART EKRANI */
         #kart-ekranı { display: none; padding: 15px; height: 100vh; }
@@ -76,10 +71,11 @@
         .card-front { background: #111; }
         .card-back { background: #0a0a0a; transform: rotateY(180deg); border-color: var(--accent-gold); }
 
+        /* Gri Yazılar Kaldırıldı, Beyaz Yapıldı */
         .eng-word { color: var(--primary-blue); font-size: 38px; font-weight: 900; margin-bottom: 10px; }
-        .eng-sentence { color: #888; font-size: 20px; line-height: 1.4; font-style: italic; max-width: 90%; }
+        .eng-sentence { color: #ffffff; font-size: 20px; line-height: 1.4; font-style: italic; max-width: 90%; }
         .tr-word { color: var(--accent-gold); font-size: 34px; font-weight: 900; margin-bottom: 10px; }
-        .tr-sentence { color: #eee; font-size: 20px; line-height: 1.4; max-width: 90%; }
+        .tr-sentence { color: #ffffff; font-size: 20px; line-height: 1.4; max-width: 90%; }
 
         /* KONTROLLER */
         .kontrol-row { display: flex; gap: 15px; margin-top: 25px; }
@@ -99,8 +95,7 @@
         <div class="logo-area">
             <div style="font-size: 60px;">🌍</div>
             <h1>GUIDE-APP</h1>
-            <p style="color: #444; font-weight: bold; letter-spacing: 2px;">TOURISM VOCABULARY</p>
-        </div>
+            </div>
         <div class="ana-btn" onclick="ekran('unite-listesi')">Sözlük</div>
         <div class="ana-btn" onclick="ekran('kutuphane')">Kitaplık</div>
         <div class="ana-btn" onclick="ekran('rotalar')">Rotalar</div>
@@ -119,7 +114,7 @@
     <div id="kart-ekranı">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 90vw; max-width: 600px; margin: 0 auto;">
             <button class="back-btn" onclick="ekran('unite-listesi')">← ÜNİTELER</button>
-            <div id="sayac" style="color: #444; font-weight: 900;"></div>
+            <div id="sayac" style="color: #666; font-weight: 900;"></div>
         </div>
         <div class="progress-container"><div id="pBar" class="progress-bar"></div></div>
         <div class="kart-merkez">
@@ -170,8 +165,9 @@
 
             if (favoriler.length > 0 && filtre === "") {
                 const fBtn = document.createElement('div');
-                fBtn.className = 'unite-card fav-unite-btn';
-                fBtn.innerHTML = `<span class="u-num">Koleksiyon</span><span class="u-name">⭐ Favori Kelimelerim (${favoriler.length})</span>`;
+                fBtn.className = 'unite-card';
+                fBtn.style.borderColor = 'var(--accent-gold)';
+                fBtn.innerHTML = `<span class="u-num" style="color:var(--accent-gold)">Koleksiyon</span><span class="u-name" style="color:var(--accent-gold)">⭐ Favori Kelimelerim (${favoriler.length})</span>`;
                 fBtn.onclick = () => { mevcutListe = favoriler; mevcutIndeks = 0; kartGoster(); ekran('kart-ekranı'); };
                 grid.appendChild(fBtn);
             }
