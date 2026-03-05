@@ -3,94 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rehber Asistanı</title>
+    <title>Rehber Pro v4.0</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#121212">
+    <meta name="theme-color" content="#0f172a">
     <style>
-        body { background-color: #121212; color: #ffffff; margin: 0; font-family: -apple-system, sans-serif; overflow: hidden; }
-        
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+            --text-white: #f8fafc;
+            --danger: #ef4444;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-white); 
+            margin: 0; 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            overflow: hidden;
+            background-image: radial-gradient(circle at top right, #1e3a8a, transparent);
+        }
+
         /* ANA EKRAN */
-        #ana-ekran { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; gap: 20px; padding: 0 20px; }
-        .ana-btn { width: 100%; max-width: 300px; padding: 25px; background: #1e1e1e; border: 2px solid #333; color: white; font-size: 18px; font-weight: bold; border-radius: 15px; text-align: center; cursor: pointer; }
-        
+        #ana-ekran { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; gap: 20px; padding: 0 30px; }
+        .ana-btn { 
+            width: 100%; max-width: 320px; padding: 20px; background: var(--card-bg); 
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); 
+            color: white; font-weight: 600; border-radius: 20px; text-align: center; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: 0.3s;
+        }
+
+        /* ARAMA MOTORU */
+        .search-container { padding: 0 20px; margin-top: 10px; }
+        .search-input {
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(30, 41, 59, 0.5); color: white; font-size: 16px; outline: none;
+        }
+
         /* ÜNİTE LİSTESİ */
         #unite-listesi { display: none; padding: 20px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
-        .unite-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; padding-bottom: 50px; }
-        .unite-btn { background: #2c3e50; padding: 18px; border-radius: 12px; font-weight: bold; border: none; color: white; cursor: pointer; text-align: left; }
+        .unite-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; padding-bottom: 40px; }
+        .unite-btn { 
+            background: linear-gradient(135deg, #1e293b, #0f172a); padding: 18px; 
+            border-radius: 15px; border: 1px solid rgba(59, 130, 246, 0.2); color: white; font-weight: 600;
+        }
+        .fav-unite-btn { border-color: var(--accent-gold); color: var(--accent-gold); }
 
         /* KART EKRANI */
-        #kart-ekranı { display: none; padding: 20px; height: 100vh; box-sizing: border-box; }
-        .kart-merkez { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70vh; }
+        #kart-ekranı { display: none; padding: 15px; height: 100vh; }
         
-        /* FLIP CARD */
-        .card-container { perspective: 1000px; width: 100%; max-width: 350px; height: 300px; }
-        .card { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        /* İLERLEME ÇUBUĞU */
+        .progress-container { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; margin: 10px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--primary-blue); width: 0%; transition: 0.4s; }
+
+        .kart-merkez { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 75vh; }
+        .card-container { perspective: 1200px; width: 100%; max-width: 360px; height: 420px; }
+        .card { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
         .card.flipped { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; text-align: center; box-sizing: border-box; }
-        .card-front { background: #1e1e1e; border: 2px solid #3498db; }
-        .card-back { background: #2c3e50; border: 2px solid #f1c40f; transform: rotateY(180deg); }
+        .card-front, .card-back { 
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
+            border-radius: 30px; display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; padding: 30px; text-align: center; box-sizing: border-box; 
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card-front { background: linear-gradient(145deg, #1e293b, #0f172a); }
+        .card-back { background: linear-gradient(145deg, #1e3a8a, #172554); transform: rotateY(180deg); }
 
-        .eng-word { color: #3498db; font-size: 28px; font-weight: bold; }
-        .eng-sentence { color: #bdc3c7; font-size: 16px; font-style: italic; margin-top: 15px; }
+        .eng-word { color: var(--primary-blue); font-size: 28px; font-weight: 800; }
+        .eng-sentence { color: #94a3b8; font-size: 16px; margin-top: 15px; font-style: italic; }
 
-        /* NAVİGASYON BUTONLARI */
-        .nav-kontrol { display: flex; justify-content: space-between; width: 100%; max-width: 350px; margin-top: 30px; }
-        .nav-btn { background: #333; color: white; border: none; padding: 15px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .nav-btn:disabled { opacity: 0.3; }
-        .sayac { margin-top: 15px; color: #888; font-size: 14px; }
+        /* KONTROLLER */
+        .kontrol-row { display: flex; gap: 15px; margin-top: 20px; }
+        .icon-btn { 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600;
+        }
+        .icon-btn.active { color: var(--accent-gold); border-color: var(--accent-gold); }
 
-        .siri-btn { background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 50px; margin-top: 20px; font-weight: bold; cursor: pointer; }
-        .back-btn { padding: 10px 20px; background: #e74c3c; border: none; color: white; border-radius: 8px; margin-bottom: 10px; font-weight: bold; }
-        
-        #kutuphane, #rotalar { display: none; padding: 20px; text-align: center; }
-        .pdf-link { display: block; background: #1e1e1e; padding: 25px; border-radius: 15px; color: white; text-decoration: none; margin-top: 20px; border: 1px dashed #555; }
+        .nav-kontrol { display: flex; justify-content: space-between; width: 100%; max-width: 360px; margin-top: 30px; }
+        .nav-btn { background: rgba(30, 41, 59, 0.8); color: white; border: 1px solid #334155; padding: 15px 25px; border-radius: 12px; font-weight: bold; }
+        .back-btn { padding: 10px 20px; background: rgba(231, 76, 60, 0.1); color: #ef4444; border: 1px solid #ef4444; border-radius: 10px; margin-bottom: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="ana-ekran">
-        <h1 style="color: #3498db;">Rehber Asistanı</h1>
-        <div class="ana-btn" onclick="ekran('unite-listesi')">📖 SÖZLÜK</div>
-        <div class="ana-btn" onclick="ekran('kutuphane')">📂 KÜTÜPHANE</div>
-        <div class="ana-btn" onclick="ekran('rotalar')">📍 ROTALAR</div>
+        <div style="text-align: center; margin-bottom: 10px;">
+            <div style="font-size: 45px;">🛡️</div>
+            <h1 style="letter-spacing: 2px; margin: 5px 0;">REHBER PRO</h1>
+            <p style="color: #64748b; font-size: 13px;">Geleceğin Rehberleri İçin</p>
+        </div>
+        <div class="ana-btn" onclick="ekran('unite-listesi')">Manevi Sözlük</div>
+        <div class="ana-btn" onclick="ekran('kutuphane')">Akademik Kitaplık</div>
+        <div class="ana-btn" onclick="ekran('rotalar')">Dijital Rotalar</div>
     </div>
 
     <div id="unite-listesi">
-        <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
-        <h2>Üniteler</h2>
+        <button class="back-btn" onclick="ekran('ana-ekran')">← Ana Menü</button>
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchBox" placeholder="Ünite veya Tema Ara..." oninput="uniteleriFiltrele()">
+        </div>
         <div id="unite-grid" class="unite-grid"></div>
     </div>
 
     <div id="kart-ekranı">
-        <button class="back-btn" onclick="ekran('unite-listesi')">← Üniteler</button>
-        <h2 id="unite-baslik" style="color:#3498db; text-align:center;"></h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button class="back-btn" onclick="ekran('unite-listesi')">← Çıkış</button>
+            <div id="sayac" style="color: #64748b; font-weight: bold;"></div>
+        </div>
+        
+        <div class="progress-container"><div id="pBar" class="progress-bar"></div></div>
         
         <div class="kart-merkez">
             <div id="kart-alani"></div>
             
-            <div class="nav-kontrol">
-                <button class="nav-btn" id="prev-btn" onclick="oncekiKart()">← Geri</button>
-                <button class="nav-btn" id="next-btn" onclick="sonrakiKart()">İleri →</button>
+            <div class="kontrol-row">
+                <button class="icon-btn" id="siriBtn"><span>🔊</span> Okut</button>
+                <button class="icon-btn" id="favBtn" onclick="favoriToggle()"><span>⭐</span> Favori</button>
             </div>
-            <div id="sayac" class="sayac"></div>
+
+            <div class="nav-kontrol">
+                <button class="nav-btn" id="prevBtn" onclick="oncekiKart()">GERİ</button>
+                <button class="nav-btn" id="nextBtn" onclick="sonrakiKart()">İLERİ</button>
+            </div>
         </div>
     </div>
 
-    <div id="kutuphane">
+    <div id="kutuphane" style="display:none; padding:40px; text-align:center;">
         <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
-        <h2>Kitaplık</h2>
-        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-link">🏺 Anadolu Uygarlıkları Tarihi (PDF)</a>
+        <h2 style="margin-top:50px;">Akademik Kitaplık</h2>
+        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="ana-btn" style="display:block; margin:20px auto;">🏺 Anadolu Uygarlıkları.pdf</a>
     </div>
 
-    <div id="rotalar">
+    <div id="rotalar" style="display:none; padding:40px; text-align:center;">
         <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
-        <h2 style="margin-top:100px; color:#555;">📍 Yakında...</h2>
+        <div style="margin-top:100px; opacity:0.5;"><h3>Rotalar Yakında... [cite: 2026-02-21]</h3></div>
     </div>
 
     <script src="words.js"></script>
     <script>
         let mevcutListe = [];
         let mevcutIndeks = 0;
+        let favoriler = JSON.parse(localStorage.getItem('rehber_favs')) || [];
 
         function ekran(id) {
             ['ana-ekran', 'unite-listesi', 'kart-ekranı', 'kutuphane', 'rotalar'].forEach(div => {
@@ -99,77 +154,78 @@
             if(id === 'ana-ekran') document.getElementById('ana-ekran').style.display = 'flex';
         }
 
-        function uniteleriBas() {
+        function uniteleriBas(filtre = "") {
             const grid = document.getElementById('unite-grid');
+            grid.innerHTML = "";
             if (typeof vocabulary === 'undefined') return;
+
+            // Favoriler Butonu
+            if (favoriler.length > 0) {
+                const fBtn = document.createElement('button');
+                fBtn.className = 'unite-btn fav-unite-btn';
+                fBtn.innerText = `⭐ Favori Kelimelerim (${favoriler.length})`;
+                fBtn.onclick = () => { mevcutListe = favoriler; mevcutIndeks = 0; kartGoster(); ekran('kart-ekranı'); };
+                grid.appendChild(fBtn);
+            }
+
             const uniteler = [...new Set(vocabulary.map(v => v.unite))];
             uniteler.forEach(u => {
                 const data = vocabulary.find(v => v.unite === u);
-                const b = document.createElement('button');
-                b.className = 'unite-btn';
-                b.innerText = `Ünite ${u}: ${data.tema}`;
-                b.onclick = () => uniteBaslat(u, data.tema);
-                grid.appendChild(b);
+                if (data.tema.toLowerCase().includes(filtre.toLowerCase()) || u.toString().includes(filtre)) {
+                    const b = document.createElement('button');
+                    b.className = 'unite-btn';
+                    b.innerText = `Ünite ${u}: ${data.tema}`;
+                    b.onclick = () => { mevcutListe = vocabulary.filter(v => v.unite === u); mevcutIndeks = 0; kartGoster(); ekran('kart-ekranı'); };
+                    grid.appendChild(b);
+                }
             });
         }
 
-        function uniteBaslat(u, tema) {
-            mevcutListe = vocabulary.filter(v => v.unite === u);
-            mevcutIndeks = 0;
-            document.getElementById('unite-baslik').innerText = tema;
-            kartGoster();
-            ekran('kart-ekranı');
-        }
+        function uniteleriFiltrele() { uniteleriBas(document.getElementById('searchBox').value); }
 
         function kartGoster() {
             const alan = document.getElementById('kart-alani');
             const kelime = mevcutListe[mevcutIndeks];
+            const isFav = favoriler.some(f => f.kelime === kelime.kelime);
             
             alan.innerHTML = `
                 <div class="card-container">
-                    <div class="card" id="main-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card" onclick="this.classList.toggle('flipped')">
                         <div class="card-front">
                             <div class="eng-word">${kelime.kelime}</div>
                             <div class="eng-sentence">${kelime.cumle}</div>
                         </div>
                         <div class="card-back">
-                            <div style="color:#f1c40f; font-size:24px; font-weight:bold;">${kelime.anlam}</div>
-                            <div style="color:white; font-size:16px; margin-top:15px;">${kelime.cumleCeviri}</div>
+                            <div style="color:var(--accent-gold); font-size:24px; font-weight:800;">${kelime.anlam}</div>
+                            <div style="color:white; font-size:16px; margin-top:20px;">${kelime.cumleCeviri}</div>
                         </div>
                     </div>
                 </div>
-                <center><button class="siri-btn" onclick="konus('${kelime.kelime}. ${kelime.cumle}')">🔊 Siriye Okut</button></center>
             `;
-
+            
+            document.getElementById('siriBtn').onclick = () => konus(`${kelime.kelime}. ${kelime.cumle}`);
+            document.getElementById('favBtn').classList.toggle('active', isFav);
             document.getElementById('sayac').innerText = `${mevcutIndeks + 1} / ${mevcutListe.length}`;
-            document.getElementById('prev-btn').disabled = (mevcutIndeks === 0);
-            document.getElementById('next-btn').disabled = (mevcutIndeks === mevcutListe.length - 1);
+            document.getElementById('pBar').style.width = `${((mevcutIndeks + 1) / mevcutListe.length) * 100}%`;
+            document.getElementById('prevBtn').disabled = (mevcutIndeks === 0);
+            document.getElementById('nextBtn').disabled = (mevcutIndeks === mevcutListe.length - 1);
         }
 
-        function sonrakiKart() {
-            if (mevcutIndeks < mevcutListe.length - 1) {
-                mevcutIndeks++;
-                kartGoster();
-            }
-        }
-
-        function oncekiKart() {
-            if (mevcutIndeks > 0) {
-                mevcutIndeks--;
-                kartGoster();
-            }
-        }
-
-        function konus(metin) {
-            const ut = new SpeechSynthesisUtterance(metin);
-            ut.lang = 'en-US';
-            window.speechSynthesis.speak(ut);
-        }
-
-        window.onload = () => {
+        function favoriToggle() {
+            const kelime = mevcutListe[mevcutIndeks];
+            const idx = favoriler.findIndex(f => f.kelime === kelime.kelime);
+            if (idx > -1) favoriler.splice(idx, 1);
+            else favoriler.push(kelime);
+            localStorage.setItem('rehber_favs', JSON.stringify(favoriler));
+            document.getElementById('favBtn').classList.toggle('active', idx === -1);
             uniteleriBas();
-            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
-        };
+        }
+
+        function sonrakiKart() { if (mevcutIndeks < mevcutListe.length - 1) { mevcutIndeks++; kartGoster(); } }
+        function oncekiKart() { if (mevcutIndeks > 0) { mevcutIndeks--; kartGoster(); } }
+        function konus(metin) { const ut = new SpeechSynthesisUtterance(metin); ut.lang = 'en-US'; window.speechSynthesis.speak(ut); }
+
+        window.onload = () => { uniteleriBas(); if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); };
     </script>
 </body>
 </html>
