@@ -3,222 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rehber Asistanı v2.0</title>
-    
+    <title>Rehber Asistanı</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
-    <link rel="apple-touch-icon" href="icon.png">
-
     <style>
-        /* SIFIRDAN DARK MODE TASARIMI */
-        :root {
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --primary-blue: #3498db;
-            --accent-gold: #f1c40f;
-            --text-main: #ffffff;
-            --text-dim: #b3b3b3;
+        /* DASHBOARD TASARIMI */
+        body { 
+            background-color: #121212; 
+            color: #ffffff; 
+            margin: 0; 
+            font-family: -apple-system, sans-serif; 
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* 3 SÜTUNLU ANA MENÜ (TABS) */
-        .tab-bar {
-            display: flex;
-            background-color: #1a1a1a;
+        /* ORTADA 3 SÜTUNLU MENÜ */
+        .dashboard-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            padding: 15px;
+            background: #1a1a1a;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid #333;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border-bottom: 2px solid #333;
         }
 
-        .tab-bar button {
-            flex: 1;
-            padding: 15px 0;
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tab-bar button.active {
-            color: var(--primary-blue);
-            border-bottom: 3px solid var(--primary-blue);
-        }
-
-        .content-section {
-            padding: 15px;
-            display: none; /* Varsayılan gizli */
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        /* SÖZLÜK TASARIMI (Üniteler) */
-        .unite-header {
-            background: linear-gradient(135deg, #2980b9, #2c3e50);
-            padding: 12px 15px;
-            margin: 20px 0 10px 0;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .kelime-kart {
-            background-color: var(--card-bg);
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-blue);
-        }
-
-        .word-eng { color: var(--primary-blue); font-size: 20px; font-weight: bold; margin-bottom: 4px; }
-        .word-tr { color: var(--accent-gold); font-size: 16px; margin-bottom: 8px; font-weight: 500; }
-        .word-example { font-style: italic; color: #95a5a6; font-size: 14px; line-height: 1.4; }
-        .word-meaning { color: #7f8c8d; font-size: 13px; margin-top: 4px; border-top: 1px solid #333; padding-top: 4px; }
-
-        /* KÜTÜPHANE TASARIMI (Sütunlar) */
-        .pdf-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Mobilde tek sütun */
-            gap: 15px;
-        }
-
-        .pdf-card {
-            background-color: var(--card-bg);
-            padding: 20px;
+        .dash-item {
+            background: #222;
+            border: 1px solid #444;
+            color: #888;
+            padding: 18px 5px;
             border-radius: 12px;
-            text-decoration: none;
-            color: white;
+            font-size: 12px;
+            font-weight: bold;
             text-align: center;
-            border: 1px solid #333;
+            cursor: pointer;
             transition: 0.2s;
         }
 
-        .pdf-card:active { transform: scale(0.95); background-color: #252525; }
-        .pdf-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+        .dash-item.active {
+            color: #3498db;
+            border-color: #3498db;
+            background: #1c2835;
+        }
 
-        /* ROTALAR */
-        .coming-soon {
+        .page { display: none; padding: 15px; }
+        .page.active { display: block; }
+
+        /* SÖZLÜK VE ÜNİTELER */
+        .u-header {
+            background: linear-gradient(90deg, #2980b9, #2c3e50);
+            padding: 12px;
+            margin: 20px 0 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .word-box {
+            background: #1e1e1e;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .w-en { color: #3498db; font-size: 19px; font-weight: bold; }
+        .w-tr { color: #f1c40f; font-size: 16px; margin: 4px 0; }
+        .w-ex { font-style: italic; color: #95a5a6; font-size: 14px; }
+
+        /* KÜTÜPHANE */
+        .pdf-box {
+            background: #1e1e1e;
+            color: white;
+            padding: 25px;
+            text-decoration: none;
+            border-radius: 15px;
             text-align: center;
-            margin-top: 100px;
-            color: var(--text-dim);
-            font-style: italic;
+            border: 1px dashed #555;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <nav class="tab-bar">
-        <button onclick="switchTab('sozluk')" id="tab-sozluk" class="active">Sözlük</button>
-        <button onclick="switchTab('kutuphane')" id="tab-kutuphane">Kütüphane</button>
-        <button onclick="switchTab('rotalar')" id="tab-rotalar">Rotalar</button>
+    <nav class="dashboard-nav">
+        <div class="dash-item active" onclick="nav('sozluk')" id="b-sozluk">SÖZLÜK</div>
+        <div class="dash-item" onclick="nav('kutuphane')" id="b-kutuphane">KÜTÜPHANE</div>
+        <div class="dash-item" onclick="nav('rotalar')" id="b-rotalar">ROTALAR</div>
     </nav>
 
-    <main id="sozluk" class="content-section active">
-        <div id="dictionary-container">
-            <p style="text-align:center; margin-top:50px;">Kelimeler yükleniyor...</p>
-        </div>
+    <main id="sozluk" class="page active">
+        <div id="render-area">Yükleniyor...</div>
     </main>
 
-    <section id="kutuphane" class="content-section">
-        <h2 style="margin-bottom:20px;">Kitaplık</h2>
-        <div class="pdf-grid">
-            <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-card">
-                <span class="pdf-icon">🏺</span>
-                <strong>Anadolu Uygarlıkları Tarihi</strong>
-                <div style="font-size:12px; color:#888; margin-top:5px;">PDF Belgesi</div>
-            </a>
-            </div>
+    <section id="kutuphane" class="page">
+        <h2 style="text-align:center;">Dijital Kitaplık</h2>
+        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-box">
+            <span style="font-size:40px;">🏺</span><br><br>
+            <strong>Anadolu Uygarlıkları Tarihi</strong>
+        </a>
     </section>
 
-    <section id="rotalar" class="content-section">
-        <div class="coming-soon">
-            <p style="font-size: 40px;">📍</p>
-            <p>Tur Rotaları Kısmı Yakında Eklenecek...</p>
+    <section id="rotalar" class="page">
+        <div style="text-align:center; margin-top:100px; color:#444;">
+            <p style="font-size:50px;">📍</p>
+            <p>Tur Rotaları Yakında Eklenecek...</p>
         </div>
     </section>
 
     <script src="words.js"></script>
-
     <script>
-        // 1. SÖZLÜK OLUŞTURUCU (WORDS.JS OKUYUCU)
-        function initDictionary() {
-            const container = document.getElementById('dictionary-container');
+        function run() {
+            const area = document.getElementById('render-area');
             
-            // words.js yüklenmiş mi kontrol et
-            if (typeof words === 'undefined') {
-                container.innerHTML = `
-                    <div style="color: #e74c3c; padding: 20px; text-align: center;">
-                        <h3>Hata: words.js dosyası bulunamadı!</h3>
-                        <p>GitHub'da words.js dosyasının adını ve içeriğini kontrol et.</p>
-                    </div>`;
+            // Senin words.js içindeki 'vocabulary' ismini burada kullanıyoruz!
+            if (typeof vocabulary === 'undefined') {
+                area.innerHTML = "<div style='color:#e74c3c; text-align:center; padding:30px;'>HATA: words.js içindeki 'vocabulary' değişkeni bulunamadı!</div>";
                 return;
             }
 
-            let htmlContent = '';
-            let lastUnit = -1;
-
-            words.forEach(item => {
-                // Yeni ünite başlığı ekle
-                if (item.unite !== lastUnit) {
-                    lastUnit = item.unite;
-                    htmlContent += `<div class="unite-header">Ünite ${item.unite}: ${item.tema}</div>`;
+            let html = '';
+            let last = -1;
+            
+            vocabulary.forEach(v => {
+                if (v.unite !== last) {
+                    last = v.unite;
+                    html += `<div class="u-header">Ünite ${v.unite}: ${v.tema}</div>`;
                 }
-
-                // Kelime kartını oluştur
-                htmlContent += `
-                    <div class="kelime-kart">
-                        <div class="word-eng">${item.kelime}</div>
-                        <div class="word-tr">${item.anlam}</div>
-                        <div class="word-example">${item.cumle}</div>
-                        <div class="word-meaning">${item.cumleCeviri}</div>
-                    </div>
-                `;
+                html += `
+                    <div class="word-box">
+                        <div class="w-en">${v.kelime}</div>
+                        <div class="w-tr">${v.anlam}</div>
+                        <div class="w-ex">${v.cumle}</div>
+                        <div style="color:#666; font-size:12px; margin-top:5px;">${v.cumleCeviri}</div>
+                    </div>`;
             });
-
-            container.innerHTML = htmlContent;
+            area.innerHTML = html;
         }
 
-        // 2. SEKME DEĞİŞTİRME MANTIĞI
-        function switchTab(tabId) {
-            // Tüm bölümleri gizle
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            // Tüm butonları inaktif yap
-            document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
-
-            // Seçileni göster
-            document.getElementById(tabId).classList.add('active');
-            document.getElementById('tab-' + tabId).classList.add('active');
-            
-            // Sayfayı en üste kaydır
-            window.scrollTo(0, 0);
+        function nav(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.dash-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('b-' + id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // 3. SAYFA YÜKLENDİĞİNDE BAŞLAT
-        window.onload = function() {
-            initDictionary();
-            
-            // Service Worker Kaydı (Senin sw.js dosyanı kullanır)
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                .then(() => console.log("Rehber Asistanı Aktif!"))
-                .catch(err => console.error("SW Hatası:", err));
-            }
-        };
+        window.onload = run;
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
 </body>
 </html>
