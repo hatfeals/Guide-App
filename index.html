@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <style>
-        /* DASHBOARD TASARIMI */
+        /* ANA KOYU TEMA */
         body { 
             background-color: #121212; 
             color: #ffffff; 
@@ -15,142 +15,151 @@
             font-family: -apple-system, sans-serif; 
         }
 
-        /* ORTADA 3 SÜTUNLU MENÜ */
-        .dashboard-nav {
+        header {
+            text-align: center;
+            padding: 30px 10px;
+            background: #1a1a1a;
+        }
+
+        /* İSTEDİĞİN 3 SÜTUNLU ANA PANEL */
+        .ana-panel {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            padding: 15px;
-            background: #1a1a1a;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid #333;
+            gap: 10px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .dash-item {
-            background: #222;
-            border: 1px solid #444;
-            color: #888;
-            padding: 18px 5px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
+        .panel-butonu {
+            background: #1e1e1e;
+            border: 2px solid #333;
+            padding: 20px 5px;
+            border-radius: 15px;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
+            color: #888;
+            font-weight: bold;
+            font-size: 13px;
         }
 
-        .dash-item.active {
-            color: #3498db;
+        .panel-butonu.aktif {
             border-color: #3498db;
-            background: #1c2835;
+            color: #3498db;
+            background: #1a2633;
         }
 
-        .page { display: none; padding: 15px; }
-        .page.active { display: block; }
+        /* İÇERİK ALANLARI */
+        .icerik-alani { display: none; padding: 20px; }
+        .icerik-alani.aktif { display: block; }
 
-        /* SÖZLÜK VE ÜNİTELER */
-        .u-header {
+        /* SÖZLÜK TASARIMI (ESKİ STİL) */
+        .unite-kart {
             background: linear-gradient(90deg, #2980b9, #2c3e50);
-            padding: 12px;
-            margin: 20px 0 10px 0;
-            border-radius: 8px;
+            padding: 15px;
+            margin: 25px 0 10px 0;
+            border-radius: 10px;
             font-weight: bold;
         }
 
-        .word-box {
+        .kelime-kutusu {
             background: #1e1e1e;
             padding: 15px;
             margin-bottom: 12px;
             border-radius: 12px;
             border-left: 5px solid #3498db;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .w-en { color: #3498db; font-size: 19px; font-weight: bold; }
-        .w-tr { color: #f1c40f; font-size: 16px; margin: 4px 0; }
-        .w-ex { font-style: italic; color: #95a5a6; font-size: 14px; }
+        .en { color: #3498db; font-size: 19px; font-weight: bold; }
+        .tr { color: #f1c40f; font-size: 16px; margin: 4px 0; }
+        .ex { font-style: italic; color: #95a5a6; font-size: 14px; }
 
         /* KÜTÜPHANE */
-        .pdf-box {
+        .pdf-link {
+            display: block;
             background: #1e1e1e;
             color: white;
             padding: 25px;
             text-decoration: none;
             border-radius: 15px;
             text-align: center;
-            border: 1px dashed #555;
-            display: block;
+            border: 2px dashed #444;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <nav class="dashboard-nav">
-        <div class="dash-item active" onclick="nav('sozluk')" id="b-sozluk">SÖZLÜK</div>
-        <div class="dash-item" onclick="nav('kutuphane')" id="b-kutuphane">KÜTÜPHANE</div>
-        <div class="dash-item" onclick="nav('rotalar')" id="b-rotalar">ROTALAR</div>
+    <header>
+        <h1>Rehber Asistanı</h1>
+        <p style="color: #666;">Mesleki Sözlük & Kütüphane</p>
+    </header>
+
+    <nav class="ana-panel">
+        <div class="panel-butonu aktif" onclick="goster('sozluk')" id="b-sozluk">SÖZLÜK</div>
+        <div class="panel-butonu" onclick="goster('kutuphane')" id="b-kutuphane">KÜTÜPHANE</div>
+        <div class="panel-butonu" onclick="goster('rotalar')" id="b-rotalar">ROTALAR</div>
     </nav>
 
-    <main id="sozluk" class="page active">
-        <div id="render-area">Yükleniyor...</div>
+    <main id="sozluk" class="icerik-alani aktif">
+        <div id="sozluk-ici">Yükleniyor...</div>
     </main>
 
-    <section id="kutuphane" class="page">
-        <h2 style="text-align:center;">Dijital Kitaplık</h2>
-        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-box">
+    <section id="kutuphane" class="icerik-alani">
+        <h2 style="text-align:center;">Kitaplık</h2>
+        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-link">
             <span style="font-size:40px;">🏺</span><br><br>
-            <strong>Anadolu Uygarlıkları Tarihi</strong>
+            Anadolu Uygarlıkları Tarihi (PDF)
         </a>
     </section>
 
-    <section id="rotalar" class="page">
-        <div style="text-align:center; margin-top:100px; color:#444;">
+    <section id="rotalar" class="icerik-alani">
+        <div style="text-align:center; margin-top:80px; color:#444;">
             <p style="font-size:50px;">📍</p>
-            <p>Tur Rotaları Yakında Eklenecek...</p>
+            <p>Yakında Eklenecek...</p>
         </div>
     </section>
 
     <script src="words.js"></script>
     <script>
-        function run() {
-            const area = document.getElementById('render-area');
+        function sozlukKur() {
+            const hedef = document.getElementById('sozluk-ici');
             
-            // Senin words.js içindeki 'vocabulary' ismini burada kullanıyoruz!
+            // DEĞİŞKEN ADI VOCABULARY OLARAK DÜZELTİLDİ
             if (typeof vocabulary === 'undefined') {
-                area.innerHTML = "<div style='color:#e74c3c; text-align:center; padding:30px;'>HATA: words.js içindeki 'vocabulary' değişkeni bulunamadı!</div>";
+                hedef.innerHTML = "<div style='color:red; text-align:center;'>HATA: words.js içindeki 'vocabulary' bulunamadı!</div>";
                 return;
             }
 
             let html = '';
-            let last = -1;
+            let sonU = -1;
             
             vocabulary.forEach(v => {
-                if (v.unite !== last) {
-                    last = v.unite;
-                    html += `<div class="u-header">Ünite ${v.unite}: ${v.tema}</div>`;
+                if (v.unite !== sonU) {
+                    sonU = v.unite;
+                    html += `<div class="unite-kart">Ünite ${v.unite}: ${v.tema}</div>`;
                 }
                 html += `
-                    <div class="word-box">
-                        <div class="w-en">${v.kelime}</div>
-                        <div class="w-tr">${v.anlam}</div>
-                        <div class="w-ex">${v.cumle}</div>
-                        <div style="color:#666; font-size:12px; margin-top:5px;">${v.cumleCeviri}</div>
+                    <div class="kelime-kutusu">
+                        <div class="en">${v.kelime}</div>
+                        <div class="tr">${v.anlam}</div>
+                        <div class="ex">${v.cumle}</div>
+                        <div style="color:#555; font-size:12px; margin-top:5px;">${v.cumleCeviri}</div>
                     </div>`;
             });
-            area.innerHTML = html;
+            hedef.innerHTML = html;
         }
 
-        function nav(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.dash-item').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('b-' + id).classList.add('active');
+        function goster(id) {
+            document.querySelectorAll('.icerik-alani').forEach(a => a.classList.remove('aktif'));
+            document.querySelectorAll('.panel-butonu').forEach(b => b.classList.remove('aktif'));
+            document.getElementById(id).classList.add('aktif');
+            document.getElementById('b-' + id).classList.add('aktif');
             window.scrollTo(0,0);
         }
 
-        window.onload = run;
+        window.onload = sozlukKur;
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
