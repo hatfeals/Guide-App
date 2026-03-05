@@ -7,234 +7,147 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <style>
-        /* GENEL DARK MODE */
-        body { 
-            background-color: #121212; 
-            color: #ffffff; 
-            margin: 0; 
-            font-family: -apple-system, sans-serif; 
-            overflow-x: hidden;
-        }
-
-        /* ANA EKRAN: 3 BUTON ALT ALTA */
-        #ana-ekran {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            gap: 20px;
-            padding: 0 20px;
-        }
-
-        .ana-btn {
-            width: 100%;
-            max-width: 300px;
-            padding: 25px;
-            background: #1e1e1e;
-            border: 2px solid #333;
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .ana-btn:active { transform: scale(0.95); background: #252525; }
-
-        /* ÜNİTE LİSTESİ EKRANI */
+        /* GENEL TASARIM */
+        body { background-color: #121212; color: #ffffff; margin: 0; font-family: -apple-system, sans-serif; }
+        
+        /* ANA EKRAN */
+        #ana-ekran { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; gap: 20px; padding: 0 20px; }
+        .ana-btn { width: 100%; max-width: 300px; padding: 25px; background: #1e1e1e; border: 2px solid #333; color: white; font-size: 18px; font-weight: bold; border-radius: 15px; text-align: center; cursor: pointer; }
+        
+        /* ÜNİTE LİSTESİ */
         #unite-listesi { display: none; padding: 20px; }
-        .unite-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .unite-btn {
-            background: #2c3e50;
-            padding: 18px;
-            border-radius: 12px;
-            text-align: left;
-            font-weight: bold;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
+        .unite-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+        .unite-btn { background: #2c3e50; padding: 18px; border-radius: 12px; font-weight: bold; border: none; color: white; cursor: pointer; text-align: left; }
 
         /* KART EKRANI */
         #kart-ekranı { display: none; padding: 20px; }
+        .card-wrapper { margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
         
-        /* ÇEVİRMELİ KART (FLIP CARD) TASARIMI */
-        .card-container {
-            perspective: 1000px;
-            width: 100%;
-            height: 250px;
-            margin-bottom: 20px;
-        }
-        .card {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
+        /* FLIP CARD */
+        .card-container { perspective: 1000px; width: 100%; height: 250px; }
+        .card { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
         .card.flipped { transform: rotateY(180deg); }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
-        }
-        .card-front { background-color: #1e1e1e; border: 2px solid #3498db; }
-        .card-back { background-color: #2c3e50; border: 2px solid #f1c40f; transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; box-sizing: border-box; }
+        .card-front { background: #1e1e1e; border: 2px solid #3498db; }
+        .card-back { background: #2c3e50; border: 2px solid #f1c40f; transform: rotateY(180deg); }
 
-        .eng-word { color: #3498db; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        .eng-sentence { color: #bdc3c7; font-size: 14px; font-style: italic; }
-        .tr-word { color: #f1c40f; font-size: 22px; font-weight: bold; margin-bottom: 10px; }
-        .tr-sentence { color: #ecf0f1; font-size: 14px; }
+        .eng-word { color: #3498db; font-size: 24px; font-weight: bold; }
+        .eng-sentence { color: #bdc3c7; font-size: 14px; font-style: italic; margin-top: 10px; }
 
-        /* GERİ BUTONU */
-        .back-btn {
-            padding: 10px 20px;
-            background: #e74c3c;
+        /* SESLENDİRME BUTONU (SIRI) */
+        .siri-btn {
+            background: #3498db;
+            color: white;
             border: none;
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-top: 15px;
             font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
         }
 
-        /* KÜTÜPHANE VE ROTALAR */
+        .back-btn { padding: 10px 20px; background: #e74c3c; border: none; color: white; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
         #kutuphane, #rotalar { display: none; padding: 20px; text-align: center; }
-        .pdf-link {
-            display: block;
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 15px;
-            color: white;
-            text-decoration: none;
-            margin-top: 20px;
-            border: 1px dashed #555;
-        }
+        .pdf-link { display: block; background: #1e1e1e; padding: 25px; border-radius: 15px; color: white; text-decoration: none; margin-top: 20px; border: 1px dashed #555; }
     </style>
 </head>
 <body>
 
     <div id="ana-ekran">
-        <h1 style="color: #3498db; margin-bottom: 30px;">Rehber Asistanı</h1>
-        <div class="ana-btn" onclick="ekranDegistir('unite-listesi')">📖 SÖZLÜK</div>
-        <div class="ana-btn" onclick="ekranDegistir('kutuphane')">📂 KÜTÜPHANE</div>
-        <div class="ana-btn" onclick="ekranDegistir('rotalar')">📍 ROTALAR</div>
+        <h1 style="color: #3498db;">Rehber Asistanı</h1>
+        <div class="ana-btn" onclick="ekran('unite-listesi')">📖 SÖZLÜK</div>
+        <div class="ana-btn" onclick="ekran('kutuphane')">📂 KÜTÜPHANE</div>
+        <div class="ana-btn" onclick="ekran('rotalar')">📍 ROTALAR</div>
     </div>
 
     <div id="unite-listesi">
-        <button class="back-btn" onclick="ekranDegistir('ana-ekran')">← Geri</button>
-        <h2>Üniteler</h2>
+        <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
+        <h2>Üniteler (1-30)</h2>
         <div id="unite-grid" class="unite-grid"></div>
     </div>
 
     <div id="kart-ekranı">
-        <button class="back-btn" onclick="ekranDegistir('unite-listesi')">← Üniteler</button>
-        <h2 id="aktif-unite-adi" style="color:#3498db;"></h2>
+        <button class="back-btn" onclick="ekran('unite-listesi')">← Üniteler</button>
+        <h2 id="unite-baslik" style="color:#3498db;"></h2>
         <div id="kart-alani"></div>
     </div>
 
     <div id="kutuphane">
-        <button class="back-btn" onclick="ekranDegistir('ana-ekran')">← Geri</button>
+        <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
         <h2>Kitaplık</h2>
-        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-link">
-            <span style="font-size:40px;">🏺</span><br><br>
-            Anadolu Uygarlıkları Tarihi (PDF)
-        </a>
+        <a href="pdfs/anadolu-uygarliklari.pdf" target="_blank" class="pdf-link">🏺 Anadolu Uygarlıkları Tarihi (PDF)</a>
     </div>
 
     <div id="rotalar">
-        <button class="back-btn" onclick="ekranDegistir('ana-ekran')">← Geri</button>
-        <div style="margin-top:100px;">
-            <p style="font-size:60px;">📍</p>
-            <h2>Yakında...</h2>
-        </div>
+        <button class="back-btn" onclick="ekran('ana-ekran')">← Geri</button>
+        <h2 style="margin-top:100px; color:#555;">📍 Yakında Eklenecek...</h2>
     </div>
 
     <script src="words.js"></script>
     <script>
-        // EKRANLAR ARASI GEÇİŞ
-        function ekranDegistir(id) {
-            document.getElementById('ana-ekran').style.display = 'none';
-            document.getElementById('unite-listesi').style.display = 'none';
-            document.getElementById('kart-ekranı').style.display = 'none';
-            document.getElementById('kutuphane').style.display = 'none';
-            document.getElementById('rotalar').style.display = 'none';
-            
-            document.getElementById(id).style.display = 'block';
+        function ekran(id) {
+            ['ana-ekran', 'unite-listesi', 'kart-ekranı', 'kutuphane', 'rotalar'].forEach(div => {
+                document.getElementById(div).style.display = (div === id) ? 'block' : 'none';
+            });
+            if(id === 'ana-ekran') document.getElementById('ana-ekran').style.display = 'flex';
             window.scrollTo(0,0);
         }
 
-        // 30 ÜNİTE BUTONUNU OLUŞTUR
-        function uniteleriOlustur() {
+        function uniteleriBas() {
             const grid = document.getElementById('unite-grid');
             if (typeof vocabulary === 'undefined') return;
-
-            // Benzersiz üniteleri bul
-            const uniteler = [...new Set(vocabulary.map(item => item.unite))];
-            
-            uniteler.forEach(uNum => {
-                const firstWord = vocabulary.find(item => item.unite === uNum);
-                const btn = document.createElement('button');
-                btn.className = 'unite-btn';
-                btn.innerHTML = `Ünite ${uNum}: ${firstWord.tema}`;
-                btn.onclick = () => kartlariGoster(uNum, firstWord.tema);
-                grid.appendChild(btn);
+            const uniteler = [...new Set(vocabulary.map(v => v.unite))];
+            uniteler.forEach(u => {
+                const data = vocabulary.find(v => v.unite === u);
+                const b = document.createElement('button');
+                b.className = 'unite-btn';
+                b.innerText = `Ünite ${u}: ${data.tema}`;
+                b.onclick = () => kartlariBas(u, data.tema);
+                grid.appendChild(b);
             });
         }
 
-        // KARTLARI EKRANA BAS (ÖN VE ARKA YÜZ)
-        function kartlariGoster(uNum, tema) {
+        function kartlariBas(u, tema) {
             const alan = document.getElementById('kart-alani');
-            document.getElementById('aktif-unite-adi').innerText = `Ünite ${uNum}: ${tema}`;
+            document.getElementById('unite-baslik').innerText = tema;
             alan.innerHTML = '';
-            
-            const unitWords = vocabulary.filter(v => v.unite === uNum);
-            
-            unitWords.forEach(w => {
-                const cardContainer = document.createElement('div');
-                cardContainer.className = 'card-container';
-                cardContainer.innerHTML = `
-                    <div class="card" onclick="this.classList.toggle('flipped')">
-                        <div class="card-front">
-                            <div class="eng-word">${w.kelime}</div>
-                            <div class="eng-sentence">${w.cumle}</div>
-                            <div style="margin-top:20px; font-size:10px; color:#555;">(Tıkla ve çevir)</div>
-                        </div>
-                        <div class="card-back">
-                            <div class="tr-word">${w.anlam}</div>
-                            <div class="tr-sentence">${w.cumleCeviri}</div>
+            const list = vocabulary.filter(v => v.unite === u);
+            list.forEach(w => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'card-wrapper';
+                wrapper.innerHTML = `
+                    <div class="card-container">
+                        <div class="card" onclick="this.classList.toggle('flipped')">
+                            <div class="card-front">
+                                <div class="eng-word">${w.kelime}</div>
+                                <div class="eng-sentence">${w.cumle}</div>
+                            </div>
+                            <div class="card-back">
+                                <div style="color:#f1c40f; font-size:22px; font-weight:bold;">${w.anlam}</div>
+                                <div style="color:white; font-size:14px; margin-top:10px;">${w.cumleCeviri}</div>
+                            </div>
                         </div>
                     </div>
+                    <button class="siri-btn" onclick="konus('${w.kelime}. ${w.cumle}')">🔊 Siriye Okut</button>
                 `;
-                alan.appendChild(cardContainer);
+                alan.appendChild(wrapper);
             });
-            
-            ekranDegistir('kart-ekranı');
+            ekran('kart-ekranı');
         }
 
-        window.onload = function() {
-            uniteleriOlustur();
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js');
-            }
+        function konus(metin) {
+            const ut = new SpeechSynthesisUtterance(metin);
+            ut.lang = 'en-US';
+            window.speechSynthesis.speak(ut);
+        }
+
+        window.onload = () => {
+            uniteleriBas();
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
         };
     </script>
 </body>
