@@ -1,9 +1,8 @@
-const CACHE_NAME = 'guide-smart-v3'; 
+const CACHE_NAME = 'guide-smart-v3';
 
 const urlsToCache = [
   '/',
   '/index.html',
-  '/style.css',
   '/words.js',
   '/icon.png',
   '/manifest.json'
